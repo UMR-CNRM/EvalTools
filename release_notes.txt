@@ -1,0 +1,127 @@
+Release notes
+
+What's new in 1.0.1
+  - *evaluator.Observations.movingAverageDailyMax*,
+    *evaluator.Observations.movingAverageDailyMax* and
+    *evaluator.Observations.movingAverageDailyMax* have no
+    longer *keep_first_day* argument.
+  - *plotting.plot_stationScores* has two new arguments: *sea_mask* and
+    *land_mask*.
+  - New variable *plotting.figsize*. Its default value is (8, 5) and it
+    corresponds to the value of the argument *figsize* of
+    *matplotlib.pyplot.figure* used in *evaltools* plotting functions.
+    Thus, changing its value in your script allows you to modify the size of
+    all plots you get with *evaltools*.
+  - New argument *color_by* in *plotting.plot_comparisonScatterPlot*.
+  - New method *evaluator.Evaluator.fairmodeBenchmark*.
+  - New argument *obs_style* in *plotting.plot_timeSeries*,
+    *plotting.plot_dataDensity* and *plotting.plot_diurnalCycle*.
+  - New argument *nb_of_minor_ticks* in *plotting.plot_meanTimeScores*,
+    *plotting.plot_medianStationScores*, *plotting.plot_timeScores* and
+    *plotting.plot_timeSeries*.
+  - New methods *Simulations.drop_unrepresentative_stations* and
+    *Observations.drop_unrepresentative_stations*.
+
+What's new in 1.0.2
+  - New method *Evaluator.selectCountries*.
+  - New method *Simulations.to_obs()*.
+  - New plotting function *plotting.plot_barScores*.
+  - New plotting function *plotting.plot_barExceedances*.
+  - New plotting function *plotting.plot_lineExceedances*.
+  - New plotting function *plotting.plot_barContingencyTable*.
+  - New arguments in *plotting.plot_stationScores*: cmaplabel, extend,
+    land_color, sea_color, mark_by.
+  - New arguments in *plotting.plot_taylorDiagram*: norm, frame, crmse_levels.
+  - New arguments in *plotting.plot_timeSeries*: thresh, thresh_kw.
+  - bug fix: a wrong threshold was used in *Evaluator.FDscores* when multiple
+    days were asked.
+  - bug fix: variance was used in Taylor diagram instead of standard deviation.
+
+What's new in 1.0.3
+  - New plotting function *plotting.plot_valuesScatterPlot*.
+  - New plotting function *plotting.performance_diagram*.
+  - New plotting function *plotting.roc_curve*.
+  - New method *evaluator.Observations.from_nc*.
+  - New method *evaluator.Simulations.from_nc*.
+  - bug fix: legend was sometimes wrong in plot_barScores.
+
+What's new in 1.0.4
+  - Add possibility to use data with time step of 3, 6, 8 or 12 hours.
+  - *plotting.plot_medianStationScores* now works for objects with daily
+    time step.
+  - *plotting.plot_timeSeries*: median or mean is now performed only with data
+    where no missing value is found across all objects.
+  - New plotting function *plotting.plot_exceedances_scores*.
+  - New arguments in *plotting.plot_lineExceedances*: black_axes,
+    nb_of_minor_ticks
+  - New argument in *evaluator.Observations.from_cn*: correc_unit.
+  - New argument in *evaluator.Simulations.from_cn*: correc_unit.
+  - New argument in *plotting.plot_barExceedances*: outputCSV.
+  - New argument in *plotting.plot_barScores*: outputCSV.
+  - New argument in *plotting.plot_barContingencyTable*: outputCSV.
+  - New argument in *plotting.roc_curve*: start_end.
+  - New argument in *plotting.performance_diagram*: start_end.
+  - New argument in *plotting.plot_timeSeries*: min_nb_sta.
+  - New argument in *plotting.plot_diurnalCycle*: nb_of_minor_ticks.
+  - Various minor fixes.
+
+What's new in 1.0.5
+  - Add possibility to use French translation for plotting annotations.
+  - New plotting function *plotting.summary_bar_chart*.
+  - New plotting function *plotting.plot_barScoresConc*.
+  - New argument in *plotting.plot_stationScores*: boundaries_above.
+  - New argument in *plotting.plot_barScores*: ref_line.
+
+What's new in 1.0.6
+  - *plotting.plot_dataDensity* is now computed only with data
+    where no missing value is found across all objects.
+  - New argument in *plotting.plot_stationScores*: marker.
+  - New module netcdf.
+  - New method *evaluator.Evaluator.remove_negvalues*.
+  - New method *evaluator.Evaluator.replace_value*.
+
+What's new in 1.0.7
+  - New available scores: success_rate and std(obs-sim).
+  - New argument in *utils.read_listing*: decimal.
+  - New arguments in *plotting.plot_timeScores*: hourly_timeseries and
+    start_end.
+  - New module sqlite.
+  - Fairmode target plot: new argument indicative_color to color legend labels
+    according to MQI90 and Y90 values.
+  - Fairmode target plot: fix Y90 calculation.
+  - Fairmode target plot: fix MQI90 calculation when only one station is
+    taken into account.
+  - All plotting functions now return their matplotlib figures and axes.
+
+What's new in 1.0.8
+  - New score available: MAE (Mean Absolute Error).
+  - New plotting function: plotting.plot_data_box.
+  - New plotting function: plotting.plot_station_score_box.
+  - New arguments in *plotting.plot_values_scatter_plot*: xmin, xmax, ymin,
+    ymax.
+  - New method *evaluator.Evaluator.colocate_nan*.
+  - Update FAIRMODE coefficients according to "FAIRMODE Guidance Document on
+    Modelling Quality Objectives and Benchmarking" version 3.3.
+  - Respecting flake8 conventions in *plotting* module (this implied the
+    renaming of some functions, old names are now deprecated).
+  - Objects with hourly time steps are allowed in tables.exceedancesScores.
+
+What's new in 1.0.9
+  - New score available: kendalltau (Kendall rank correlation coefficient).
+  - New score available: NRMSE.
+  - New argument in *plotting.plot_station_scores*: ref.
+  - New argument in *plotting.plot_significant_differences*: score_type.
+  - New argument in *plotting.plot_score_quartiles*: score_type.
+  - New argument in *plotting.plot_station_score_density*: score_type.
+  - New argument in *plotting.plot_station_score_box*: score_type.
+  - New function: tables.average_scores.
+  - New plotting function: plotting.plot_average_ft_scores.
+  - New plotting function: fairmode.plot_forecast_target_diagram.
+
+What's new in 1.0.10
+  - New method *evaluator.Evaluator.quarterly_score*.
+  - New arguments in *plotting.plot_station_scores*: vcenter, norm.
+  - New arguments in *dataset.Store.get_dataset*: keep_dup_sta.
+  - Fix *plotting.plot_time_series* legend when ls argument is not '-'.
+  - Fix Evaluator constructor when simulations and observations have a
+    different time step.
