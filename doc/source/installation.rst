@@ -4,7 +4,7 @@ Installation
 Get source code
 ---------------
 
-Go to https://opensource.umr-cnrm.fr/projects/evaltools/wiki to download a tar archive of `evaltools` sources.
+`<https://github.com/UMR-CNRM/EvalTools>`_
 
 Install with pip
 ----------------

@@ -37,6 +37,8 @@ pip3 install . --no-build-isolation
 
 ## Documentation
 
+Online doc of the latest release on master branch is available at https://umr-cnrm.github.io/EvalTools
+
 To compile html documentation, draw example charts with
 
 ```bash
