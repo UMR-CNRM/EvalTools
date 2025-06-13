@@ -125,3 +125,7 @@ What's new in 1.0.10
   - Fix *plotting.plot_time_series* legend when ls argument is not '-'.
   - Fix Evaluator constructor when simulations and observations have a
     different time step.
+
+What's new in 2.0.0
+  - New plotting function: fairmode.plot_yearly_fairmode_summary.
+  - New plotting function: fairmode.plot_scatter_diagram.

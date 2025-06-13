@@ -558,3 +558,17 @@ evt.plotting.plot_bar_scores_conc(
     bar_kwargs={},
     annotation=None,
 )
+
+print("yearly_fairmode_summary")
+with plt.style.context('default'):
+    evt.fairmode.plot_yearly_fairmode_summary(
+        objs['ENS'],
+        output_file="../doc/source/charts/yearly_fairmode_summary",
+    )
+
+print("scatter_diagram")
+with plt.rc_context({'figure.figsize': (11, 5)}):
+    evt.fairmode.plot_scatter_diagram(
+        objs['ENS'],
+        output_file="../doc/source/charts/scatter_diagram",
+    )
