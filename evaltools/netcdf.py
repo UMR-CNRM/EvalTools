@@ -9,7 +9,6 @@ import pandas as pd
 import numpy as np
 
 import evaltools as evt
-from evaltools._deprecate import deprecate, deprecate_kwarg
 
 try:
     import netCDF4
@@ -243,7 +242,6 @@ def _read_netcdf(f, start_time, end_time, stations, species,
     return (df, etape, grid_obj)
 
 
-@deprecate_kwarg('seriesType', 'series_type')
 def get_df(species, stations, generic_file_path, start_date, end_date, lag,
            correc_unit=1, series_type='hourly', date_format='%Y%m%d.%f',
            level=0, times_name="Times", lon_name="lon", lat_name="lat",
@@ -365,8 +363,6 @@ def get_df(species, stations, generic_file_path, start_date, end_date, lag,
     return DF
 
 
-@deprecate_kwarg('seriesType', 'series_type')
-@deprecate_kwarg('forecastHorizon', 'forecast_horizon', stacklevel=3)
 def simulations_from_netCDF(
         generic_file_path, stations,
         species, model, start, end, forecast_horizon=1,
@@ -482,9 +478,3 @@ def simulations_from_netCDF(
     if availability_ratio is not False:
         obj.drop_unrepresentative_stations(availability_ratio)
     return obj
-
-
-Simulations_fromNetCDF = deprecate(
-    'Simulations_fromNetCDF',
-    simulations_from_netCDF,
-)

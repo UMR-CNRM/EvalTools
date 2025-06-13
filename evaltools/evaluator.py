@@ -14,17 +14,8 @@ import re
 import warnings
 
 import evaltools as evt
-from evaltools._deprecate import deprecate
-from evaltools._deprecate import deprecate_kwarg
-from evaltools._deprecate import deprecate_attrs
 
 
-@deprecate_attrs(
-    start_date='startDate',
-    end_date='endDate',
-    series_type='seriesType',
-    forecast_horizon='forecastHorizon',
-)
 class Observations(object):
     """
     Class gathering observations of the studied case.
@@ -34,10 +25,6 @@ class Observations(object):
 
     """
 
-    @deprecate_kwarg('startDate', 'start_date')
-    @deprecate_kwarg('endDate', 'end_date', stacklevel=3)
-    @deprecate_kwarg('seriesType', 'series_type', stacklevel=4)
-    @deprecate_kwarg('forecastHorizon', 'forecast_horizon', stacklevel=5)
     def __init__(self, species, start_date, end_date, stations, series_type,
                  forecast_horizon=1, step=1, path=''):
         """
@@ -114,8 +101,6 @@ class Observations(object):
         return self.dataset.data
 
     @classmethod
-    @deprecate_kwarg('seriesType', 'series_type')
-    @deprecate_kwarg('forecastHorizon', 'forecast_horizon', stacklevel=3)
     def from_time_series(
             cls, generic_file_path, species, start, end, stations,
             correc_unit=1, series_type='hourly', forecast_horizon=1,
@@ -171,7 +156,6 @@ class Observations(object):
         return obj
 
     @classmethod
-    @deprecate_kwarg('forecastHorizon', 'forecast_horizon')
     def from_dataset(
             cls, ds, forecast_horizon=1, correc_unit=1,
             listing_path=None, step=1, **kwargs):
@@ -229,8 +213,6 @@ class Observations(object):
         return obj
 
     @classmethod
-    @deprecate_kwarg('seriesType', 'series_type')
-    @deprecate_kwarg('forecastHorizon', 'forecast_horizon', stacklevel=3)
     def from_nc(cls, start, end, paths, species, series_type='hourly',
                 forecast_horizon=1, group=None, dim_names={},
                 coord_var_names={}, listing_path=None, metadata_var={},
@@ -333,8 +315,6 @@ class Observations(object):
         return observations
 
     @classmethod
-    @deprecate_kwarg('seriesType', 'series_type')
-    @deprecate_kwarg('forecastHorizon', 'forecast_horizon', stacklevel=3)
     def from_sqlite(
             cls, start, end, paths, species, table, time_key_name='dt',
             series_type='hourly', step=1, forecast_horizon=1,
@@ -452,7 +432,6 @@ class Observations(object):
         )
         self.stations = self.stations.loc[self.dataset.data.columns]
 
-    @deprecate_kwarg('filePath', 'file_path')
     def to_csv(self, file_path):
         """
         Save timeseries dataframe as csv.
@@ -473,7 +452,6 @@ class Observations(object):
             date_format=self.dataset.date_format,
         )
 
-    @deprecate_kwarg('filePath', 'file_path')
     def check_values(self, threshold, drop=False, file_path=None):
         """
         Check if observation values exceed a threshold.
@@ -530,8 +508,6 @@ class Observations(object):
             simulations,
             color)
 
-    @deprecate_kwarg('startDate', 'start_date')
-    @deprecate_kwarg('endDate', 'end_date', stacklevel=3)
     def sub_period(self, start_date, end_date):
         """
         Build a new Observations object define on a shorter period.
@@ -568,7 +544,6 @@ class Observations(object):
 
         return new_obs
 
-    @deprecate_kwarg('outputFile', 'output_file')
     def sim_vs_obs(
             self, grid, time, point_size=20, vmin=None, vmax=None,
             cmap=None, colors=None, bounds=None, output_file=None,
@@ -836,13 +811,6 @@ class Observations(object):
         return new_obs
 
 
-@deprecate_attrs(
-    start_date='startDate',
-    end_date='endDate',
-    series_type='seriesType',
-    sim_df='simDF',
-    forecast_horizon='forecastHorizon',
-)
 class Simulations(object):
     """
     Class gathering simulations of the studied case.
@@ -871,10 +839,6 @@ class Simulations(object):
 
     """
 
-    @deprecate_kwarg('startDate', 'start_date')
-    @deprecate_kwarg('endDate', 'end_date', stacklevel=3)
-    @deprecate_kwarg('seriesType', 'series_type', stacklevel=4)
-    @deprecate_kwarg('forecastHorizon', 'forecast_horizon', stacklevel=5)
     def __init__(self, start_date, end_date, stations, species, model,
                  series_type, forecast_horizon, step=1, path=''):
         """
@@ -943,9 +907,6 @@ class Simulations(object):
         return self.datasets[0].freq
 
     @classmethod
-    @deprecate_kwarg('stationsIdx', 'stations_idx')
-    @deprecate_kwarg('seriesType', 'series_type', stacklevel=3)
-    @deprecate_kwarg('forecastHorizon', 'forecast_horizon', stacklevel=4)
     def from_time_series(
             cls, generic_file_path, stations_idx, species, model,
             start, end, forecast_horizon=1, correc_unit=1,
@@ -1000,7 +961,6 @@ class Simulations(object):
         return obj
 
     @classmethod
-    @deprecate_kwarg('stationsIdx', 'stations_idx')
     def from_dataset(
             cls, model, ds_list, stations_idx=None, correc_unit=1,
             step=1, path=''):
@@ -1063,8 +1023,6 @@ class Simulations(object):
         return obj
 
     @classmethod
-    @deprecate_kwarg('seriesType', 'series_type')
-    @deprecate_kwarg('forecastHorizon', 'forecast_horizon', stacklevel=3)
     def from_nc(cls, model, start, end, paths, species, series_type='hourly',
                 stations=None, forecast_horizon=1, group=None, dim_names={},
                 coord_var_names={}, correc_unit=1, step=1):
@@ -1209,8 +1167,6 @@ class Simulations(object):
         return simulations
 
     @classmethod
-    @deprecate_kwarg('seriesType', 'series_type')
-    @deprecate_kwarg('forecastHorizon', 'forecast_horizon', stacklevel=3)
     def from_sqlite(
             cls, model, start, end, paths, species, table, time_key_name='dt',
             series_type='hourly', step=1, forecast_horizon=1,
@@ -1375,7 +1331,6 @@ class Simulations(object):
         for ds in self.datasets:
             ds.data.drop(columns=dropped_sta, inplace=True)
 
-    @deprecate_kwarg('forecastDay', 'forecast_day')
     def to_obs(self, forecast_day=0):
         """
         Transform Simulations object to Observations object.
@@ -1393,7 +1348,6 @@ class Simulations(object):
         obs.dataset.update_from_dataset(self.datasets[forecast_day])
         return obs
 
-    @deprecate_kwarg('filePath', 'file_path')
     def to_csv(self, file_path):
         """
         Save timeseries dataframe as csv.
@@ -1415,8 +1369,6 @@ class Simulations(object):
                 date_format=self.datasets[0].date_format,
             )
 
-    @deprecate_kwarg('startDate', 'start_date')
-    @deprecate_kwarg('endDate', 'end_date', stacklevel=3)
     def sub_period(self, start_date, end_date):
         """
         Build a new Simulations object define on a shorter period.
@@ -1463,7 +1415,6 @@ class Simulations(object):
             new_sim.datasets[fd].data = self.datasets[fd].data.loc[idx]
         return new_sim
 
-    @deprecate_kwarg('filePath', 'file_path')
     def check_values(self, threshold, drop=False, file_path=None):
         """
         Check if observation values exceed a threshold.
@@ -1669,7 +1620,6 @@ class Simulations(object):
         return new_sim
 
 
-@deprecate_kwarg('inputFilePath', 'input_file_path')
 def load(input_file_path):
     """
     Load an evaluator.Evaluator object.
@@ -1697,14 +1647,6 @@ def load(input_file_path):
         )
 
 
-@deprecate_attrs(
-    start_date='startDate',
-    end_date='endDate',
-    forecast_horizon='forecastHorizon',
-    series_type='seriesType',
-    obs_df='obsDF',
-    sim_df='simDF',
-)
 class Evaluator(object):
     """
     Class gathering observations and simulations of the studied case.
@@ -1872,7 +1814,6 @@ class Evaluator(object):
             )
             self.obs_df[idx_nan] = np.nan
 
-    @deprecate_kwarg('outputFilePath', 'output_file_path')
     def dump(self, output_file_path):
         """
         Dump the evaluator.Evaluator object.
@@ -1910,8 +1851,6 @@ class Evaluator(object):
             print(f"- Sim : {self.simulations.path}")
             print(f"- Obs : {self.observations.path}")
 
-    @deprecate_kwarg('startDate', 'start_date')
-    @deprecate_kwarg('endDate', 'end_date', stacklevel=3)
     def sub_period(self, start_date, end_date):
         """
         Build a new Evaluator object define on a shorter period.
@@ -1973,10 +1912,6 @@ class Evaluator(object):
         if inplace is not True:
             return obj
 
-    @deprecate_kwarg('minLon', 'min_lon')
-    @deprecate_kwarg('maxLon', 'max_lon', stacklevel=3)
-    @deprecate_kwarg('minLat', 'min_lat', stacklevel=4)
-    @deprecate_kwarg('maxLat', 'max_lat', stacklevel=5)
     def sub_area(self, min_lon, max_lon, min_lat, max_lat, inplace=True):
         """
         Drop stations not contained within the given lat/lon boundaries.
@@ -2027,8 +1962,6 @@ class Evaluator(object):
         else:
             return self.station_sub_list(kept_stations, inplace=inplace)
 
-    @deprecate_kwarg('obsOutputFile', 'obs_output_file')
-    @deprecate_kwarg('simOutputFile', 'sim_output_file', stacklevel=3)
     def time_series_to_csv(self, obs_output_file, sim_output_file):
         """
         Save timeseries dataframes as csv.
@@ -2055,7 +1988,6 @@ class Evaluator(object):
                 sep=',', na_rep='nan', float_format='%g', header=True,
                 index=True, date_format='%Y%m%d%H')
 
-    @deprecate_kwarg('forecastDay', 'forecast_day')
     def get_obs(self, forecast_day, start_end=None):
         """
         Get observations according to the forecast day.
@@ -2086,7 +2018,6 @@ class Evaluator(object):
 
         return self.obs_df.loc[idx]
 
-    @deprecate_kwarg('forecastDay', 'forecast_day')
     def get_sim(self, forecast_day, start_end=None):
         """
         Get simulations according to the forecast day.
@@ -2175,7 +2106,6 @@ class Evaluator(object):
                     rpl,
                     inplace=True)
 
-    @deprecate_kwarg('outputFile', 'output_file')
     def temporal_scores(
             self, score_list, output_file=None, availability_ratio=0.75):
         """
@@ -2280,8 +2210,6 @@ class Evaluator(object):
 
         return res
 
-    @deprecate_kwarg('outputFile', 'output_file')
-    @deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=3)
     def conc_scores(self, score_list, conc_range, output_file=None,
                     min_nb_val=10, based_on='obs', forecast_day=0):
         """
@@ -2357,8 +2285,6 @@ class Evaluator(object):
 
         return stats_df_sta, obs.count().sum()  # , stats_df_sta.count()[0]
 
-    @deprecate_kwarg('filePath', 'file_path')
-    @deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=3)
     def quarterly_score(
             self, file_path, score='RMSE', forecast_day=0,
             score_type='temporal', averaging='median',
@@ -2459,8 +2385,6 @@ class Evaluator(object):
         )
         return res
 
-    @deprecate_kwarg('filePath', 'file_path')
-    @deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=3)
     def quarterly_median_score(
             self, file_path, score='RMSE', forecast_day=0,
             availability_ratio=0.75, min_nb_sta=1):
@@ -2512,7 +2436,6 @@ class Evaluator(object):
                   header=True, index=True, date_format='%Y%m%d%H')
         return res
 
-    @deprecate_kwarg('outputFile', 'output_file')
     def spatial_scores(self, score_list, output_file=None, min_nb_sta=10):
         """
         Compute spatial scores per time step.
@@ -2626,7 +2549,6 @@ class Evaluator(object):
 
         return res
 
-    @deprecate_kwarg('outputFile', 'output_file')
     def mean_time_scores(
             self, score_list, output_file=None, min_nb_sta=10,
             availability_ratio=0.75):
@@ -2692,7 +2614,6 @@ class Evaluator(object):
 
         return res
 
-    @deprecate_kwarg('outputFile', 'output_file')
     def temporal_ft_scores(
             self, score_list, availability_ratio=0.75, output_file=None,
             coords=False):
@@ -2794,7 +2715,6 @@ class Evaluator(object):
 
         return res
 
-    @deprecate_kwarg('outputFile', 'output_file')
     def median_station_scores(
             self, score_list, availability_ratio=0.75,
             min_nb_sta=10, output_file=None):
@@ -2973,7 +2893,6 @@ class Evaluator(object):
 
         return res
 
-    @deprecate_kwarg('outputFile', 'output_file')
     def spatiotemporal_scores(
             self, score_list, forecast_days='all', threshold=.75,
             output_file=None):
@@ -3165,7 +3084,6 @@ class Evaluator(object):
                               self.simulations.normalized_series(),
                               color=self.color)
 
-    @deprecate_kwarg('outputFile', 'output_file')
     def contingency_table(self, threshold, output_file):
         """
         Contingency table.
@@ -3201,7 +3119,6 @@ class Evaluator(object):
                     columns=["sim>s", "sim<s", "total"]).astype(int)
                 f.write("D{}\n".format(fd) + res.T.to_string() + '\n\n')
 
-    @deprecate_kwarg('outputFile', 'output_file')
     def obs_exceedances(self, threshold, output_file):
         """
         Look for exceedances in observed time series.
@@ -3220,7 +3137,6 @@ class Evaluator(object):
         with open(output_file, 'w') as f:
             f.write(res.to_string())
 
-    @deprecate_kwarg('outputFile', 'output_file')
     def sim_exceedances(self, threshold, output_file):
         """
         Look for exceedances in simulated time series.
@@ -3241,135 +3157,3 @@ class Evaluator(object):
             file_path = output_file.format(forecastDay=fd, forecast_day=fd)
             with open(file_path, 'w') as f:
                 f.write(res.to_string())
-
-
-Observations.fromTimeSeries = deprecate(
-    'fromTimeSeries',
-    Observations.from_time_series,
-)
-Observations.fromDataset = deprecate(
-    'fromDataset',
-    Observations.from_dataset,
-)
-Observations.persistenceModel = deprecate(
-    'persistenceModel',
-    Observations.persistence_model,
-)
-Observations.subPeriod = deprecate(
-    'subPeriod',
-    Observations.sub_period,
-)
-Observations.simVSobs = deprecate(
-    'simVSobs',
-    Observations.sim_vs_obs,
-)
-Observations.dailyMean = deprecate(
-    'dailyMean',
-    Observations.daily_mean,
-)
-Observations.dailyMax = deprecate(
-    'dailyMax',
-    Observations.daily_max,
-)
-Observations.movingAverageDailyMax = deprecate(
-    'movingAverageDailyMax',
-    Observations.moving_average_daily_max,
-)
-Observations.filteredSeries = deprecate(
-    'filteredSeries',
-    Observations.filtered_series,
-)
-
-Simulations.fromTimeSeries = deprecate(
-    'fromTimeSeries',
-    Simulations.from_time_series,
-)
-Simulations.fromDataset = deprecate(
-    'fromDataset',
-    Simulations.from_dataset,
-)
-Simulations.subPeriod = deprecate(
-    'subPeriod',
-    Simulations.sub_period,
-)
-Simulations.dailyMean = deprecate(
-    'dailyMean',
-    Simulations.daily_mean,
-)
-Simulations.dailyMax = deprecate(
-    'dailyMax',
-    Simulations.daily_max,
-)
-Simulations.movingAverageDailyMax = deprecate(
-    'movingAverageDailyMax',
-    Simulations.moving_average_daily_max,
-)
-Simulations.filteredSeries = deprecate(
-    'filteredSeries',
-    Simulations.filtered_series,
-)
-
-Evaluator.subPeriod = deprecate(
-    'subPeriod',
-    Evaluator.sub_period,
-)
-Evaluator.stationSubList = deprecate(
-    'stationSubList',
-    Evaluator.station_sub_list,
-)
-Evaluator.subArea = deprecate(
-    'subArea',
-    Evaluator.sub_area,
-)
-Evaluator.selectCountries = deprecate(
-    'selectCountries',
-    Evaluator.select_countries,
-)
-Evaluator.quarterlyMedianScore = deprecate(
-    'quarterlyMedianScore',
-    Evaluator.quarterly_median_score,
-)
-Evaluator.meanTimeScores = deprecate(
-    'meanTimeScores',
-    Evaluator.mean_time_scores,
-)
-Evaluator.medianStationScores = deprecate(
-    'medianStationScores',
-    Evaluator.median_station_scores,
-)
-Evaluator.dailyMean = deprecate(
-    'dailyMean',
-    Evaluator.daily_mean,
-)
-Evaluator.dailyMax = deprecate(
-    'dailyMax',
-    Evaluator.daily_max,
-)
-Evaluator.movingAverageDailyMax = deprecate(
-    'movingAverageDailyMax',
-    Evaluator.moving_average_daily_max,
-)
-Evaluator.filteredSeries = deprecate(
-    'filteredSeries',
-    Evaluator.filtered_series,
-)
-Evaluator.stationScores = deprecate(
-    'stationScores',
-    Evaluator.temporal_scores,
-)
-Evaluator.timeScores = deprecate(
-    'timeScores',
-    Evaluator.spatial_scores,
-)
-Evaluator.FDscores = deprecate(
-    'FDscores',
-    Evaluator.spatiotemporal_scores,
-)
-Evaluator.FTscores = deprecate(
-    'FTscores',
-    Evaluator.temporal_ft_scores,
-)
-Evaluator.quarterlyMedianScore = deprecate(
-    'quarterlyMedianScore',
-    Evaluator.quarterly_score,
-)

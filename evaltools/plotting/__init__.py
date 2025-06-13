@@ -3,5 +3,4 @@
 # http://www.cecill.info
 
 from .plotting import *
-from .plotting_deprecated import *
 from ._utils import IMPLEMENTED_PLOTS

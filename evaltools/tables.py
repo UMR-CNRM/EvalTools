@@ -8,7 +8,6 @@ import numpy as np
 import pandas as pd
 
 import evaltools as evt
-from evaltools._deprecate import deprecate, deprecate_kwarg
 
 
 def average_scores(
@@ -110,9 +109,6 @@ def average_scores(
             f.write(stats.to_latex(bold_rows=True, float_format=float_format))
 
 
-@deprecate_kwarg('forecastDay', 'forecast_day')
-@deprecate_kwarg('outputFile', 'output_file', stacklevel=3)
-@deprecate_kwarg('outputLatex', 'output_latex', stacklevel=4)
 def median_station_scores(
         objects, forecast_day, score_list, title=None,
         output_file=None, output_latex=None, labels=None,
@@ -167,15 +163,6 @@ def median_station_scores(
     )
 
 
-medianStationScores = deprecate(
-    'medianStationScores',
-    median_station_scores,
-)
-
-
-@deprecate_kwarg('forecastDay', 'forecast_day')
-@deprecate_kwarg('outputFile', 'output_file', stacklevel=3)
-@deprecate_kwarg('outputLatex', 'output_latex', stacklevel=4)
 def exceedances_scores(
         objects, forecast_day, thresholds, score_list=None,
         title=None, output_file=None, output_latex=None,
@@ -290,9 +277,3 @@ def exceedances_scores(
                 f.write('\n\n')
 
     return [tables[thr] for thr in thresholds]
-
-
-exceedancesScores = deprecate(
-    'exceedancesScores',
-    exceedances_scores,
-)

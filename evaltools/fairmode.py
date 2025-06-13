@@ -21,7 +21,6 @@ import matplotlib.lines as mlines
 import evaltools as evt
 from .evaluator import Evaluator
 from .plotting._utils import plot_func
-from ._deprecate import deprecate_kwarg, deprecate
 
 
 def _add_method(cls):
@@ -1160,12 +1159,6 @@ def _target_diagram_multi_models(
 
 
 @_add_method(Evaluator)
-@deprecate_kwarg('forecastDay', 'forecast_day')
-@deprecate_kwarg('targetFile', 'target_file', stacklevel=3)
-@deprecate_kwarg('summaryFile', 'summary_file', stacklevel=4)
-@deprecate_kwarg('targetTitle', 'target_title', stacklevel=3)
-@deprecate_kwarg('summaryTitle', 'summary_title', stacklevel=4)
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=5)
 def fairmode_benchmark(
         self, target_file=None, summary_file=None,
         output_csv=None, availability_ratio=.75, label=None,
@@ -1652,13 +1645,6 @@ def _forecast_target_diagram_multi_models(
         return fig, ax
 
 
-setattr(
-    Evaluator,
-    'fairmodeBenchmark',
-    deprecate('fairmodeBenchmark', fairmode_benchmark),
-)
-
-
 @plt.rc_context({'figure.autolayout': False})
 @plot_func
 def plot_yearly_fairmode_summary(
@@ -1789,12 +1775,12 @@ def plot_yearly_fairmode_summary(
         title = (
             "{model}\n" +
             "{spe}\n" +
-            "{startDate} 00UTC to {endDate} 23UTC"
+            "{start_date} 00UTC to {end_date} 23UTC"
         ).format(
             model=label or self.model,
             spe=self._fairmode_params['species_name'],
-            startDate=self.startDate,
-            endDate=self.endDate,
+            start_date=self.start_date,
+            end_date=self.end_date,
         )
 
     # scores
@@ -2026,12 +2012,12 @@ def plot_scatter_diagram(
         title = (
             "{model}\n" +
             "{spe}\n" +
-            "{startDate} 00UTC to {endDate} 23UTC"
+            "{start_date} 00UTC to {end_date} 23UTC"
         ).format(
             model=label,
             spe=obj._fairmode_params['species_name'],
-            startDate=obj.startDate,
-            endDate=obj.endDate,
+            start_date=obj.start_date,
+            end_date=obj.end_date,
         )
 
     res = _scatter_diagram_multi_models(

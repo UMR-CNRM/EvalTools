@@ -23,7 +23,6 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import evaltools as evt
 import evaltools.translation as tr
-from evaltools._deprecate import deprecate_kwarg
 from . import _mpl
 from ._utils import plot_func, IMPLEMENTED_PLOTS
 
@@ -390,8 +389,6 @@ def _compute_kde(data, bw_method=None):
     return res
 
 
-@deprecate_kwarg('forecastDay', 'forecast_day')
-@deprecate_kwarg('outputFile', 'output_file', stacklevel=3)
 @plot_func
 def plot_data_density(
         objects, forecast_day=0, labels=None, colors=None,
@@ -628,8 +625,6 @@ def plot_score_density(
     return fig, ax
 
 
-@deprecate_kwarg('forecastDay', 'forecast_day')
-@deprecate_kwarg('outputFile', 'output_file', stacklevel=3)
 def plot_station_score_density(
         objects, score, forecast_day=0, availability_ratio=0.75,
         labels=None, colors=None, linestyles=None,
@@ -841,9 +836,6 @@ def plot_station_score_box(
     )
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('score_names', 'score_name', stacklevel=4)
 def plot_mean_time_scores(
         objects, score, score_name=None,
         min_nb_sta=10, availability_ratio=0.75,
@@ -953,9 +945,6 @@ def plot_mean_time_scores(
     )
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('score_names', 'score_name', stacklevel=4)
 def plot_median_station_scores(
         objects, score, score_name=None,
         min_nb_sta=10, availability_ratio=0.75,
@@ -1213,11 +1202,6 @@ def plot_average_ft_scores(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('boundary_resolution', 'bnd_resolution', stacklevel=4)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=5)
-@deprecate_kwarg('interp2D', 'interp2d', stacklevel=6)
 def plot_station_scores(
         obj, score, ref=None, forecast_day=0, output_file=None, title="",
         bbox=None, file_formats=['png'], point_size=5,
@@ -1513,9 +1497,6 @@ def plot_station_scores(
 IMPLEMENTED_PLOTS['station_scores'] = plot_station_scores
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('score_names', 'score_name', stacklevel=4)
 @plot_func
 def plot_time_scores(
         objects, score, term, hourly_timeseries=False, min_nb_sta=10,
@@ -1673,7 +1654,6 @@ def plot_time_scores(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
 @plot_func
 def plot_quarterly_score(
         files, labels, score, first_quarter=None, last_quarter=None,
@@ -1789,9 +1769,6 @@ def plot_quarterly_score(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=3)
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=4)
 @plot_func
 def plot_taylor_diagram(
         objects, forecast_day=0, norm=True, colors=None, markers=None,
@@ -1929,9 +1906,6 @@ def plot_taylor_diagram(
     return fig, ax
 
 
-@deprecate_kwarg('forecastDay', 'forecast_day')
-@deprecate_kwarg('outputFile', 'output_file', stacklevel=3)
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=4)
 @plot_func
 def plot_score_quartiles(
         objects, xscore, yscore,
@@ -2092,9 +2066,6 @@ def plot_score_quartiles(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
 @plot_func
 def plot_time_series(
         objects, station_list=None, start_end=None, forecast_day=0,
@@ -2343,10 +2314,6 @@ def plot_time_series(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
-@deprecate_kwarg('xticksLabels', 'xtick_labels', stacklevel=5)
 @plot_func
 def plot_bar_scores(
         objects, score, forecast_day=0, averaging='mean', title="",
@@ -2516,9 +2483,6 @@ def plot_bar_scores(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
 @plot_func
 def plot_bar_exceedances(
         obj, threshold, data="obs", start_end=None, forecast_day=0,
@@ -2682,9 +2646,6 @@ def plot_bar_exceedances(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
 @plot_func
 def plot_line_exceedances(
         objects, threshold, start_end=None, forecast_day=0,
@@ -2836,9 +2797,6 @@ def plot_line_exceedances(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
 @plot_func
 def plot_bar_contingency_table(
         objects, threshold, forecast_day=0, start_end=None, title="",
@@ -2921,10 +2879,6 @@ def plot_bar_contingency_table(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
-@deprecate_kwarg('xticksLabels', 'xtick_labels', stacklevel=5)
 @plot_func
 def plot_bar_scores_conc(
         objects, score, conc_range, forecast_day=0, averaging='mean',
@@ -3095,8 +3049,6 @@ def plot_bar_scores_conc(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=3)
 @plot_func
 def plot_roc_curve(
         objects, thresholds, forecast_day=0,
@@ -3201,8 +3153,6 @@ def plot_roc_curve(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=3)
 @plot_func
 def plot_performance_diagram(
         objects, threshold, forecast_day=0,
@@ -3362,8 +3312,6 @@ def plot_performance_diagram(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
 @plot_func
 def plot_diurnal_cycle(
         objects, station_list=None, availability_ratio=0.75,
@@ -3575,9 +3523,6 @@ def plot_diurnal_cycle(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
 @plot_func
 def plot_comparison_scatter_plot(
         score, xobject, yobject, forecast_day=0, title="", xlabel=None,
@@ -3715,8 +3660,6 @@ def plot_comparison_scatter_plot(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=3)
 @plot_func
 def plot_significant_differences(
         score_list, former_objects, later_objects,
@@ -3882,9 +3825,6 @@ def plot_significant_differences(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
 @plot_func
 def plot_values_scatter_plot(
         obj, station_list=None, start_end=None, forecast_day=0, title="",
@@ -4016,8 +3956,6 @@ def plot_values_scatter_plot(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=3)
 @plt.rc_context({'figure.autolayout': False})
 def plot_summary_bar_chart(
         objects_lol, forecast_day=0, averaging='mean', mean_obs=True,
@@ -4294,9 +4232,6 @@ plot_bb = plot_summary_bar_chart
 IMPLEMENTED_PLOTS['summary_bar_chart'] = plot_summary_bar_chart
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
 def plot_exceedances_scores(
         objects, threshold, score_list=None, forecast_day=0, title="",
         labels=None, colors=None, subregions=None, subregion_labels=None,
