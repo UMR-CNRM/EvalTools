@@ -3,7 +3,6 @@
 # http://www.cecill.info
 """This module gathers functions designed to compute tables of scores."""
 
-from functools import partial
 import numpy as np
 import pandas as pd
 
@@ -102,7 +101,7 @@ def average_scores(
         with open(output_latex, 'w') as f:
             if title is not None:
                 f.write(title+'\n\n')
-            tab = stats.rename(
+            stats = stats.rename(
                 columns=lambda x: x.replace('_', ' '),
                 index=lambda x: x.replace('_', ' '),
             )
