@@ -2183,6 +2183,7 @@ def plot_time_series(
                 [], [],
                 color=c,
                 label=lb,
+                marker=m,
                 ls='-' if envelope else ls,
             )
         )
