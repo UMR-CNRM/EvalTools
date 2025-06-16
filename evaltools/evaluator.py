@@ -2139,7 +2139,6 @@ class Evaluator(object):
                 obs, sim, score_list,
                 axis=0,
                 threshold=float(availability_ratio),
-                keep_nan=True,
             )
             if output_file is not None:
                 stats_df_sta.to_csv(
@@ -2272,7 +2271,6 @@ class Evaluator(object):
             obs, sim, score_list,
             axis=0,
             threshold=int(min_nb_val),
-            keep_nan=True,
         )
 
         if output_file is not None:

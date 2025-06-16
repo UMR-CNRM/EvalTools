@@ -131,7 +131,7 @@ def stats2d_numpy(obs, sim, score_list, threshold, **kwargs):
 
 
 def stats2d(
-        obs, sim, score_list, axis=0, threshold=0.75, keep_nan=True,
+        obs, sim, score_list, axis=0, threshold=0.75,
         **kwargs):
     """
     Compute scores from 2D DataFrames along a given axis.
@@ -151,8 +151,6 @@ def stats2d(
         (if type(threshold) is float) of data available in both obs and
         sim required per column (if axis == 0) or per row (if axis == 1) to
         compute the scores.
-    keep_nan : bool
-        If True, np.nan are writen when threshold condition is not met.
 
     Returns
     -------
@@ -221,9 +219,12 @@ def ft_stats(
     for t in range(0, 24, step):
         o = obs.xs(time(t), level='Time', axis=0)
         s = sim.xs(time(t), level='Time', axis=0)
-        st = stats2d(o, s, score_list, axis=0,
-                     threshold=float(availability_ratio),
-                     keep_nan=True, **kwargs)
+        st = stats2d(
+            o, s, score_list,
+            axis=0,
+            threshold=float(availability_ratio),
+            **kwargs,
+        )
         for s in score_list:
             res[s][t+24*day] = st[s]
     return res

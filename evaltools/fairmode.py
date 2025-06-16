@@ -189,7 +189,6 @@ def rmsu(self, threshold=.75, forecast_day=0):
         score_list=['RMSE'],
         axis=0,
         threshold=threshold,
-        keep_nan=True,
     )
     res.columns = ['RMSU']
     return res.RMSU
@@ -220,7 +219,6 @@ def mqi(self, threshold=.75, forecast_day=0):
     rmse = evt.scores.stats2d(
         obs, sim, score_list=['RMSE'], axis=0,
         threshold=threshold,
-        keep_nan=True,
     )
     rmsu = self.rmsu(threshold=threshold, forecast_day=forecast_day)
     res = rmse.RMSE/(self._fairmode_params['beta']*rmsu)
@@ -291,7 +289,6 @@ def mqi_y(self, availability_ratio=.75, forecast_day=0):
         ],
         axis=0,
         threshold=float(availability_ratio),
-        keep_nan=True,
     )
 
     alpha = self._fairmode_params['alpha']
@@ -667,7 +664,6 @@ def plot_fairmode_summary(
             'sim_percentile {}'.format(perc),
         ],
         axis=0, threshold=float(availability_ratio),
-        keep_nan=True,
     )
     u_95 = u95r*np.sqrt(
         (1-alpha**2) *
@@ -998,7 +994,6 @@ def _target_diagram_multi_models(
             score_list=['MeanBias', 'CRMSE', 'PearsonR'],
             axis=0,
             threshold=float(ar),
-            keep_nan=True,
         )
         if sc.isna().all().all():
             print("No valid station !!!")
@@ -1457,7 +1452,6 @@ def _forecast_target_diagram_multi_models(
             score_list=['RMSE'],
             axis=0,
             threshold=float(availability_ratio),
-            keep_nan=True,
         )
 
         sub_obj = obj.sub_period(obj_pers.start_date, obj_pers.end_date)
@@ -1474,7 +1468,6 @@ def _forecast_target_diagram_multi_models(
             score_list=['MeanBias', 'CRMSE', 'PearsonR', 'RMSE'],
             axis=0,
             threshold=float(availability_ratio),
-            keep_nan=True,
         )
 
         if sc.isna().all().all():
@@ -2174,7 +2167,6 @@ def _scatter_diagram_multi_models(
             ],
             axis=0,
             threshold=float(ar),
-            keep_nan=True,
         )
         print(sc)
         print(obj.get_obs(0).mean(axis=0))
