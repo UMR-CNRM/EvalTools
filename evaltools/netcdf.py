@@ -16,6 +16,49 @@ except ImportError:
     print("!!! Python module netCDF4 is required to read netCDF files !!!")
 
 
+def _simple_slice(arr, axis, starts, stops=None):
+    """
+    Slice a numpy array along axis, at starts/stops indices.
+
+    Parameters
+    ----------
+    arr : numpy.array
+        Array to slice.
+    axis : list of integers
+        List of axes where to perform the slices.
+    starts : list of integers
+        List of indices where to start slicing, corresponding to list of axes.
+    stops : None or list of integers
+        List of indices where to stop slicing, corresponding to list of axes.
+        If None, returns array values at start index.
+
+    Returns
+    -------
+    numpy.array
+        Array (or value) sliced along the requested axes.
+
+    """
+    if stops is None:
+        stops = [s + 1 for s in starts]
+
+    sl = [slice(None)] * arr.ndim
+    for ax, start, stop in zip(axis, starts, stops):
+        if stop >= arr.shape[ax] - 1:
+            sl[ax] = slice(start, None)
+        elif stop == start + 1:
+            sl[ax] = start  # no slice => will drop the axis
+        else:
+            sl[ax] = slice(start, stop)
+    return arr[tuple(sl)]
+
+
+def _slice(arr, index, stop=None):
+    """Slice from 1D array/list with _simple_slice."""
+    if stop is not None:
+        stop = [stop]
+    return _simple_slice(np.asarray(arr), [0], [index], stop)
+
+
 def _grid_init(f, lon_name, lat_name, stations):
     """Initialise Interpolator class object with lon/lat grid."""
     nc = netCDF4.Dataset(f)
@@ -163,6 +206,7 @@ def _read_netcdf(f, start_time, end_time, stations, species,
         else:
             times_list = [datetime.strptime(str(x), date_format)
                           for x in times[:]]
+
     # check which hours are to be kept
     t1 = 0
     t2 = len(times_list) - 1
@@ -190,7 +234,8 @@ def _read_netcdf(f, start_time, end_time, stations, species,
     if series_type == 'daily':
         # don't bother about filtering daily times (fast enough)
         etape = True
-    elif (etape is False and times_list[t1] <= start_time <= times_list[t2]):
+    elif (etape is False and
+            times_list[t1] <= start_time <= _slice(times_list, t2)):
         print("Found first date in file " + f)
         etape = True
         T1 = times_list.index(start_time, t1, t2+1)
@@ -211,29 +256,26 @@ def _read_netcdf(f, start_time, end_time, stations, species,
         for idim, dim in enumerate(dims):
             if dim in ['bottom_top', 'height', 'lev', 'level', 'zdim']:
                 ilevel = idim
-            elif dim in ['south_north', 'lat', 'latitude']:
+            elif dim in ['south_north', 'lat', 'latitude', 'y', lat_name]:
                 ilat = idim
-            elif dim in ['west_east', 'lon', 'longitude']:
+            elif dim in ['west_east', 'lon', 'longitude', 'x', lon_name]:
                 ilon = idim
-            elif dim in ['time', 'times', 'Time', 'Times']:
+            elif dim in ['time', 'times', 'Time', 'Times',
+                         'time_instant', 'time_counter', times_name]:
                 itimes = idim
             else:
                 print("Unable to recognise dimension {d}".format(d=dim))
                 print("Trying to use dimensions : (time, lat, lon[, level])")
 
-        if itimes == 0:
-            if ilevel is None:
-                var = np.array(nc.variables[species][T1:T2, :, :])
-                var = var.transpose(itimes, ilat, ilon)
-            else:
-                var = np.array(nc.variables[species][T1:T2, :, :, :])
-                var = var.transpose(itimes, ilat, ilon, ilevel)
-                var = var[:, :, :, level]
+        var = _simple_slice(nc.variables[species][:], [itimes], [T1], [T2])
+        if ilevel is not None:
+            var = var.transpose(itimes, ilat, ilon, ilevel)
+            var = var[:, :, :, level]
         else:
-            print('Unable to handle species where first dim is not time')
+            var = var.transpose(itimes, ilat, ilon)
 
         df = _interpolate_netcdf(grid_obj, var)
-        df.index = times_list[T1:T2]
+        df.index = _slice(times_list, T1, T2)
 
     if end_time <= times_list[t2] and etape is True:
         print("Found last date in file "+f)
