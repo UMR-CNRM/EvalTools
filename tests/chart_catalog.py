@@ -573,3 +573,9 @@ with plt.rc_context({'figure.figsize': (11, 5)}):
         objs['ENS'],
         output_file="../doc/source/charts/scatter_diagram",
     )
+
+print("dynamic_indicator")
+evt.plotting.plot_dynamic_indicator_day_night(
+    obj,
+    output_file="../doc/source/charts/dynamic_indicator_day_night",
+)

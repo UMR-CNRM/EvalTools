@@ -270,3 +270,15 @@ plots scores computed for each required concentration range (scores are
 computed for each site and averaged).
 
 .. image:: charts/bar_scores_conc.png
+
+
+Dynamic indicators
+------------------
+
+:func:`plot_dynamic_indicator_day_night<evaltools.plotting.plotting.plot_dynamic_indicator_day_night>`
+
+:func:`plot_dynamic_indicator_day_week<evaltools.plotting.plotting.plot_dynamic_indicator_day_week>`
+
+:func:`plot_dynamic_indicator_summer_winter<evaltools.plotting.plotting.plot_dynamic_indicator_summer_winter>`
+
+.. image:: charts/dynamic_indicator_day_night.png

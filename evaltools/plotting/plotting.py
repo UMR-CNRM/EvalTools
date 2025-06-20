@@ -12,6 +12,7 @@ from copy import deepcopy
 import numpy as np
 import pandas as pd
 
+from math import ceil
 from scipy.stats import gaussian_kde, ttest_ind, mannwhitneyu
 from scipy.stats import scoreatpercentile
 
@@ -4399,3 +4400,298 @@ def plot_exceedances_scores(
                 )
 
     return figs
+
+
+def _plot_dynamic_indicator(
+        data, xlabel, ylabel, title, xmax, annotate_sta,
+        black_axes, output_file, output_csv, color_by, fig, ax):
+
+    # save data
+    if output_csv is not None:
+        with open(output_csv, 'w', encoding="utf-8") as f:
+            f.write(data.to_string())
+
+    # define point color in data['z']
+    if color_by is None:
+        # remove nan to compute gaussian_kde
+        idx_not_nan = ~data.isna().any(axis=1)
+        xy = data[[xlabel, ylabel]].loc[idx_not_nan].values.T.astype('float')
+        try:
+            z = gaussian_kde(xy)(xy)
+            z = pd.DataFrame(z, index=idx_not_nan[idx_not_nan].index,
+                             columns=['z'])
+            data['z'] = np.nan
+            data.update(z)
+            # sort points by density (=> densest points are plotted last)
+            data.sort_values(by='z', inplace=True)
+        except np.linalg.linalg.LinAlgError:
+            data['z'] = 'blue'
+    else:
+        data['z'] = pd.Series(color_by)
+        data.sort_values(by='z', inplace=True)
+
+    # plotting
+    fig = fig or plt.figure()
+    ax = ax or fig.add_subplot(1, 1, 1)
+
+    ax.scatter(
+        data[xlabel], data[ylabel], c=data['z'], s=50,
+        edgecolors='none', zorder=10,
+    )
+
+    if annotate_sta:
+        for sta, row in data.iterrows():
+            annotation = sta + '\n(' + str(round(row[xlabel], 1)) \
+                              + ', ' + str(round(row[ylabel], 1)) + ')'
+            ax.annotate(
+                annotation,
+                xy=(row[xlabel], row[ylabel]),
+                fontsize=8,
+            )
+
+    # line y = x
+    ax.add_artist(plt.axline((0, 0), slope=1, color='k', lw=1, ls='--'))
+
+    # min max values
+    if xmax is None:
+        minval = np.nanmin(data)
+        maxval = np.nanmax(data)
+        xmax = ceil(max([abs(minval), maxval]) + 0.2)
+
+    if black_axes:
+        ax.hlines(0, -xmax, xmax, ls='-', color='grey')
+        ax.vlines(0, -xmax, xmax, ls='-', color='grey')
+    ax.annotate('dMod>dObs', xy=(0, 1), xytext=(10, -10),
+                va='top', ha='left', fontsize=10, weight='bold',
+                xycoords='axes fraction', textcoords='offset points')
+    ax.annotate('dMod<dObs', xy=(1, 0), xytext=(-10, 10),
+                va='bottom', ha='right', fontsize=10, weight='bold',
+                xycoords='axes fraction', textcoords='offset points')
+
+    _mpl.set_axis_elements(
+        ax,
+        title=title,
+        xlabel=xlabel,
+        ylabel=ylabel,
+        # black_axes=black_axes,
+        xmin=-xmax,
+        xmax=xmax,
+        ymin=-xmax,
+        ymax=xmax,
+    )
+
+    ax.set_axisbelow(True)
+
+    if output_file is not None:
+        fig.savefig(output_file)
+
+    return fig, ax
+
+
+def plot_dynamic_indicator_day_night(
+        obj, forecast_day=0, title="",
+        availability_ratio=0.75,
+        black_axes=True, color_by=None,
+        xmax=None, annotate_sta=False,
+        output_file=None, output_csv=None,
+        file_formats=['png'],
+        fig=None, ax=None):
+    """
+    Scatter plot to compare the delta (day hours - night hours).
+
+    By default, points are colored according to the density of points.
+
+    Parameters
+    ----------
+    obj : evaltools.Evaluator object
+        Object used for plotting.
+    forecast_day : int
+        Integer corresponding to the chosen forecast day used for plotting.
+    title : str
+        Title for the plots. It must contain {score} instead of the
+        score name.
+    black_axes : bool
+        If true, y=0 and x=0 lines are painted in black.
+    color_by : None or dictionary
+        Dictionary with keys corresponding to station names and
+        values corresponding to colors.
+    xmax : None or scalar
+        Max limit of the axes.
+    annotate_sta : bool
+        If True, annotate each point with station name and day-night
+        values (obs, mod).
+    output_file : str or None
+        File where to save the plots (without extension). If None, the figure
+        is shown in a popping window. If subregions is not None, it must
+        contain '{score}' instead of the score name.
+    output_csv : str or None
+        File where to save the data. The file name must contain {score}
+        instead of the score name.
+    file_formats : list of str
+        List of file extensions.
+
+    Returns
+    -------
+    List of couples (matplotlib.figure.Figure, matplotlib.axes._axes.Axes)
+        Figure and Axes objects corresponding to each plots. Note that if the
+        plots have been shown in the user interface window, these figures and
+        axes will not be usable again.
+
+    """
+    ylabel = "delta_mod (day-night)"
+    xlabel = "delta_obs (day-night)"
+
+    # define day and night hours
+    night = [x for x in range(0, 8)] + [x for x in range(20, 25)]
+    day = [x for x in range(8, 20)]
+
+    # drop stations with too few data
+    obj.colocate_nan()
+    obj.simulations.drop_unrepresentative_stations(availability_ratio)
+    obj.observations.drop_unrepresentative_stations(availability_ratio)
+
+    # get data
+    obs = obj.get_obs(forecast_day=forecast_day)
+    sim = obj.get_sim(forecast_day=forecast_day)
+
+    # Build dataframe with hourly data
+    data = pd.DataFrame({xlabel: obs.unstack(), ylabel: sim.unstack()})
+    data = data.reset_index(level=1)
+    data = data.rename(columns={'level_1': 'Datetimes'})
+
+    # Add columns for date and night/day hours (for groupby)
+    data['Dates'] = data['Datetimes'].dt.date
+    data['Night'] = data.apply(
+        lambda x: (
+            'night' if x['Datetimes'].hour in night
+            else ('day' if x['Datetimes'].hour in day else 0)
+        ),
+        axis=1,
+    )
+    # Drop useless column
+    data.drop('Datetimes', axis=1, inplace=True)
+    # Group by station, date, and night/day hour (compute mean)
+    data = data.groupby([data.index, "Dates", "Night"]).mean()
+    # Compute diff between night and day averages
+    data = data.groupby(level=[0, 1]).diff().dropna()
+    # Invert to (day - night) diff if needed
+    if data.index.get_level_values(2).unique().values == ['night']:
+        data = -1 * data
+    data = data.droplevel(2)
+
+    # Compute mean of all dates
+    data = data.groupby(level=0).mean()
+
+    fig, ax = _plot_dynamic_indicator(
+                    data, xlabel, ylabel, title, xmax, annotate_sta,
+                    black_axes, output_file, output_csv, color_by, fig, ax)
+
+    return fig, ax
+
+
+def plot_dynamic_indicator_day_week(
+        obj, forecast_day=0, title="",
+        availability_ratio=0.75,
+        black_axes=True, color_by=None,
+        xmax=None, annotate_sta=False,
+        output_file=None, output_csv=None,
+        file_formats=['png'],
+        fig=None, ax=None):
+    """Scatter plot to compare the delta (weekdays - weekend)."""
+    ylabel = "delta_mod (weekdays-weekend)"
+    xlabel = "delta_obs (weekdays-weekend)"
+
+    # drop stations with too few data
+    obj.colocate_nan()
+    obj.simulations.drop_unrepresentative_stations(availability_ratio)
+    obj.observations.drop_unrepresentative_stations(availability_ratio)
+
+    # get data
+    obs = obj.get_obs(forecast_day=forecast_day)
+    sim = obj.get_sim(forecast_day=forecast_day)
+
+    # Build dataframe with hourly data
+    data = pd.DataFrame({xlabel: obs.unstack(), ylabel: sim.unstack()})
+    data = data.reset_index(level=1)
+    data = data.rename(columns={'level_1': 'Datetimes'})
+
+    # Add columns for weekdays (for groupby)
+    data['Weekday'] = data['Datetimes'].dt.weekday  # 0 = Monday, 6 = Sunday
+    data['Weekday'] = data.apply(
+        lambda x: 'weekend' if x['Weekday'] in [5, 6] else 'weekday',
+        axis=1,
+    )
+    # Drop useless column
+    data.drop('Datetimes', axis=1, inplace=True)
+    # Group by station and week day (compute mean)
+    data = data.groupby([data.index, "Weekday"]).mean()
+    # Compute diff between weekday and weekend averages
+    data = data.groupby(level=[0]).diff().dropna()
+    # Invert to (weekday - weekend) diff if needed
+    if data.index.get_level_values(1).unique().values == ['weekend']:
+        data = -1 * data
+    data = data.droplevel(1)
+
+    fig, ax = _plot_dynamic_indicator(
+                    data, xlabel, ylabel, title, xmax, annotate_sta,
+                    black_axes, output_file, output_csv, color_by, fig, ax)
+
+    return fig, ax
+
+
+def plot_dynamic_indicator_summer_winter(
+        obj, forecast_day=0, title="",
+        availability_ratio=0.75,
+        black_axes=True, color_by=None,
+        xmax=None, annotate_sta=False,
+        output_file=None, output_csv=None,
+        file_formats=['png'],
+        fig=None, ax=None):
+    """Scatter plot to compare the delta (summer - winter)."""
+    ylabel = "delta_mod (summer-winter)"
+    xlabel = "delta_obs (summer-winter)"
+
+    # Define summer and winter months
+    summer = [6, 7, 8]
+    winter = [1, 2, 12]
+
+    # drop stations with too few data
+    obj.colocate_nan()
+    obj.simulations.drop_unrepresentative_stations(availability_ratio)
+    obj.observations.drop_unrepresentative_stations(availability_ratio)
+
+    # get data
+    obs = obj.get_obs(forecast_day=forecast_day)
+    sim = obj.get_sim(forecast_day=forecast_day)
+
+    # Build dataframe with hourly data
+    data = pd.DataFrame({xlabel: obs.unstack(), ylabel: sim.unstack()})
+    data = data.reset_index(level=1)
+    data = data.rename(columns={'level_1': 'Datetimes'})
+
+    # Add column for summer/winter period (for groupby)
+    data['Period'] = data['Datetimes'].dt.month  # 1 = January, 12 = December
+    data['Period'] = data.apply(
+        lambda x: (
+            'summer' if x['Period'] in summer
+            else ('winter' if x['Period'] in winter else 0)
+        ),
+        axis=1,
+    )
+    # Drop useless column
+    data.drop('Datetimes', axis=1, inplace=True)
+    # Group by station and period (compute mean)
+    data = data.groupby([data.index, "Period"]).mean()
+    data.drop(0, level=1, inplace=True)  # drop months outside summer/winter
+    # Compute diff between summer and winter averages
+    data = data.groupby(level=[0]).diff().dropna()
+    # Invert to (summer - winter) diff if needed
+    if data.index.get_level_values(1).unique().values == ['winter']:
+        data = -1 * data
+    data = data.droplevel(1)
+
+    fig, ax = _plot_dynamic_indicator(
+                    data, xlabel, ylabel, title, xmax, annotate_sta,
+                    black_axes, output_file, output_csv, color_by, fig, ax)
+
+    return fig, ax
