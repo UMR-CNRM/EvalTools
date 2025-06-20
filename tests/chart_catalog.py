@@ -301,9 +301,10 @@ evt.plotting.plot_significant_differences(
 
 print("diurnal_cycle")
 evt.plotting.plot_diurnal_cycle(
-    list(objs.values()), station_list=stations.index[:3],
+    list(objs.values()), station_list=None,
     title="Diurnal Cycle\n\n", file_formats=['png'], black_axes=True,
     output_file="../doc/source/charts/diurnal_cycle",
+    plot_type='mean',
 )
 evt.plotting.plot_diurnal_cycle(
     list(objs.values()), station_list=stations.index[:3],

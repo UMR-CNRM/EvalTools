@@ -3420,7 +3420,7 @@ def plot_diurnal_cycle(
             data = df.quantile(quant, axis=0).T
 
         elif plot_type == 'mean':
-            data = df.mean(axis=0)
+            data = df.mean(axis=0).to_frame(name='mean')
             if envelope is True:
                 linestyles = ['-', '--', '--']
                 df_std = df.std(axis=0)
@@ -3473,9 +3473,7 @@ def plot_diurnal_cycle(
         data = df.quantile(quant, axis=0).T
 
     elif plot_type == 'mean':
-        data = df.mean(axis=0).to_frame()
-        data.name = 'mean'
-        data = data.to_frame()
+        data = df.mean(axis=0).to_frame(name='mean')
         if envelope is True:
             linestyles = ['-', '--', '--']
             df_std = df.std(axis=0)

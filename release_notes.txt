@@ -129,3 +129,4 @@ What's new in 1.0.10
 What's new in 2.0.0
   - New plotting function: fairmode.plot_yearly_fairmode_summary.
   - New plotting function: fairmode.plot_scatter_diagram.
+  - Fix *plotting.plot_diurnal_cycle* when plot_type argument is 'mean' .
