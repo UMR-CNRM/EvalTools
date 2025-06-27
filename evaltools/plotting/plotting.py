@@ -2886,7 +2886,8 @@ def plot_bar_scores_conc(
         objects, score, conc_range, forecast_day=0, averaging='mean',
         title=None, labels=None, colors=None, xtick_labels=None,
         min_nb_val=10, based_on='obs', bar_kwargs={},
-        nb_vals=True, output_csv=None, fig=None, ax=None):
+        nb_vals=True, output_csv=None, ymin=None, ymax=None,
+        fig=None, ax=None):
     """
     Barplot for scores per concentration class.
 
@@ -2926,6 +2927,8 @@ def plot_bar_scores_conc(
     nb_vals : boolean
         Whether the number of computed values for each bar must be displayed
         or not.
+    ymin, ymax : None or scalar
+        Limits of the vertical axis.
     output_csv : str or None
         File where to save the data. The file name can contain {score}
         instead of the score name.
@@ -3010,6 +3013,8 @@ def plot_bar_scores_conc(
         title_kw=dict(label=title, pad=25),
         ylabel=score,
         xticks_kw=dict(rotation=30, ha='right'),
+        ymin=ymin,
+        ymax=ymax,
     )
 
     if output_csv is not None:

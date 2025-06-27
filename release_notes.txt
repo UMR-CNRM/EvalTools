@@ -132,4 +132,5 @@ What's new in 2.0.0
   - New plotting function: *plotting.plot_dynamic_indicator_day_night*.
   - New plotting function: *plotting.plot_dynamic_indicator_day_week*.
   - New plotting function: *plotting.plot_dynamic_indicator_summer_winter*.
-  - Fix *plotting.plot_diurnal_cycle* when plot_type argument is 'mean' .
+  - Fix *plotting.plot_diurnal_cycle* when plot_type argument is 'mean'.
+  - New arguments in *plotting.plot_bar_scores_conc*: ymin, ymax.
