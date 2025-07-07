@@ -20,7 +20,7 @@ model_list = ["ENS", "MFM"]
 model_colors = {"ENS": '#CB025A', "MFM": '#004D8A'}
 species = 'no2'
 
-observations = evt.evaluator.Observations.fromTimeSeries(
+observations = evt.evaluator.Observations.from_time_series(
     generic_file_path=obs_path.format(
         year="{year}", species=species, station="{station}",
     ),
@@ -29,12 +29,12 @@ observations = evt.evaluator.Observations.fromTimeSeries(
     start=start_date,
     end=end_date,
     stations=stations,
-    forecastHorizon=4,
+    forecast_horizon=4,
 )
 
-persistence = observations.persistenceModel()
+persistence = observations.persistence_model()
 
-observations = observations.subPeriod(start_date+dt.timedelta(1), end_date)
+observations = observations.sub_period(start_date+dt.timedelta(1), end_date)
 
 objs = {}
 daily_objs = {}
@@ -44,10 +44,10 @@ for model in model_list:
         model=model, runtype='forecast', forecastDay='{forecastDay}',
         year='{year}', species=species, station='{station}')
     stations_idx = observations.stations.index
-    simulations = evt.evaluator.Simulations.fromTimeSeries(
+    simulations = evt.evaluator.Simulations.from_time_series(
         generic_file_path=generic_file_path,
-        stationsIdx=stations_idx,
-        forecastHorizon=fh,
+        stations_idx=stations_idx,
+        forecast_horizon=fh,
         correc_unit=1,
         species=species,
         model=model,
@@ -57,7 +57,7 @@ for model in model_list:
     objs[model] = evt.evaluator.Evaluator(
         observations, simulations, color=model_colors[model],
     )
-    daily_objs[model] = objs[model].dailyMax()
+    daily_objs[model] = objs[model].daily_max()
 
 print("plot_median_station_scores")
 evt.plotting.plot_median_station_scores(
