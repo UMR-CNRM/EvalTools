@@ -1835,8 +1835,6 @@ def plot_yearly_fairmode_summary(
 
     # ------- obs mean -------
     ax1 = sub_axes[0]
-    print('obs mean')
-    print(obs)
     common_params(
         ax1, xmin=0, xmax=100, points=obs, sym=False,
     )
@@ -1852,8 +1850,6 @@ def plot_yearly_fairmode_summary(
     # ------- TIME Bias Norm -------
     ax3 = sub_axes[1]
     x = scores['MeanBias']/(beta*rmsu_)
-    print('TIME Bias Norm')
-    print(x)
     mpc = common_params(
         ax3, xmin=-2, xmax=2, points=x, mqi=np.abs(x).dropna(),
     )
@@ -1880,8 +1876,6 @@ def plot_yearly_fairmode_summary(
     ax7 = sub_axes[2]
     x = ((2.*np.nanstd(obs)*np.nanstd(sim)*(1. - corr)) /
          (beta*rmsu_)**2)
-    print('SPACE Corr Norm')
-    print(x)
     mpc = common_params(
         ax7, xmin=0, xmax=2, points=np.array([x]), sym=False,
         mqi=np.array([x]),
@@ -1907,8 +1901,6 @@ def plot_yearly_fairmode_summary(
     # ------- SPACE StDev Norm -------
     ax8 = sub_axes[3]
     x = (np.nanstd(sim)-np.nanstd(obs))/(beta*rmsu_)
-    print('SPACE StDev Norm')
-    print(x)
     mpc = common_params(
         ax8, xmin=-2, xmax=2, points=np.array([x]), mqi=np.abs(np.array([x])),
     )
@@ -2129,11 +2121,9 @@ def _scatter_diagram_multi_models(
     sim = scores['sim_mean']
     obs = scores['obs_mean']
     max_val = max([np.nanmax(sim), np.nanmax(obs)]) * 1.05
-    print(max_val)
     for i in range(10):
         if max_val % 10 != 0:
             max_val += 1
-    print(max_val)
 
     fig = fig or plt.figure()
     ax = ax or fig.add_subplot(1, 1, 1)
@@ -2168,8 +2158,6 @@ def _scatter_diagram_multi_models(
             axis=0,
             threshold=float(ar),
         )
-        print(sc)
-        print(obj.get_obs(0).mean(axis=0))
         if sc.isna().all().all():
             print("No valid station !!!")
             return None, None, None
@@ -2179,10 +2167,7 @@ def _scatter_diagram_multi_models(
             availability_ratio=float(ar),
             forecast_day=forecast_day,
         )
-        print(sc.obs_mean)
-        print(sc.MeanBias / mqi_y)
         diag_pos = 0.9 * x  # beta*rmsu / sc.obs_mean
-        print(diag_pos)
         y90 = str(
             round(
                 obj.y90(
