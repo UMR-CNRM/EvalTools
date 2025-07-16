@@ -143,18 +143,25 @@ FAIRMODE diagrams
 The functions
 :func:`plot_target_diagram<evaltools.fairmode.plot_target_diagram>`,
 :func:`plot_fairmode_summary<evaltools.fairmode.plot_fairmode_summary>`
-and
 :func:`plot_forecast_target_diagram<evaltools.fairmode.plot_forecast_target_diagram>`
-displays three of the Fairmode diagrams: the assessment target plot,
-the summary report and the forecast target plot.
+:func:`plot_forecast_target_diagram<evaltools.fairmode.plot_yearly_fairmode_summary>`
+and
+:func:`plot_forecast_target_diagram<evaltools.fairmode.plot_scatter_diagram>`
+displays five of the Fairmode diagrams: the assessment target plot,
+the summary report, the forecast target plot, the summary report for
+yearly average data and the scatter diagram for yearly average data.
 A description of these diagrams can be found
-on `FAIRMODE website <http://fairmode.jrc.ec.europa.eu/wg1.html>`_.
+on `FAIRMODE website <https://fairmode.jrc.ec.europa.eu/Guidance/Assessment/>`_.
 
 .. image:: charts/target.png
 
 .. image:: charts/summary.png
 
 .. image:: charts/forecast_target.png
+
+.. image:: charts/yearly_fairmode_summary.png
+
+.. image:: charts/scatter_diagram.png
 
 Scores as a barplot
 -------------------
@@ -263,3 +270,15 @@ plots scores computed for each required concentration range (scores are
 computed for each site and averaged).
 
 .. image:: charts/bar_scores_conc.png
+
+
+Dynamic indicators
+------------------
+
+:func:`plot_dynamic_indicator_day_night<evaltools.plotting.plotting.plot_dynamic_indicator_day_night>`
+
+:func:`plot_dynamic_indicator_day_week<evaltools.plotting.plotting.plot_dynamic_indicator_day_week>`
+
+:func:`plot_dynamic_indicator_summer_winter<evaltools.plotting.plotting.plot_dynamic_indicator_summer_winter>`
+
+.. image:: charts/dynamic_indicator_day_night.png

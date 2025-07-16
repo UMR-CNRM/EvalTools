@@ -22,13 +22,8 @@ except ImportError:
     pass
 
 import evaltools as evt
-from evaltools._deprecate import deprecate
-from evaltools._deprecate import deprecate_kwarg
-from evaltools._deprecate import deprecate_attrs
 
 
-@deprecate_attrs(
-    start_date='startDate', end_date='endDate', series_type='seriesType')
 class Dataset(object):
     """
     Dataset class for evaltools input data.
@@ -39,9 +34,6 @@ class Dataset(object):
 
     """
 
-    @deprecate_kwarg('startDate', 'start_date')
-    @deprecate_kwarg('endDate', 'end_date', stacklevel=3)
-    @deprecate_kwarg('seriesType', 'series_type', stacklevel=4)
     def __init__(self, stations, start_date, end_date, species="",
                  series_type='hourly', step=1):
         """
@@ -163,8 +155,6 @@ class Dataset(object):
                 "Listing does not contain all stations of the Dataset !!!")
         self._metadata = stations.loc[self.data.columns]
 
-    @deprecate_kwarg('startDate', 'start_date')
-    @deprecate_kwarg('endDate', 'end_date', stacklevel=3)
     def sub_period(self, start_date, end_date):
         """
         Build a new Dataset object define on a shorter period.
@@ -392,7 +382,6 @@ class Dataset(object):
 
         store = None
 
-    @deprecate_kwarg('filePath', 'file_path')
     def check_threshold(self, threshold, drop=False, file_path=None):
         """
         Check if values exceed a threshold.
@@ -432,24 +421,6 @@ class Dataset(object):
         nb_val = (~self.data.isna()).sum(axis=1)
         ax = nb_val.plot()
         return ax
-
-
-Dataset.subPeriod = deprecate(
-    'subPeriod',
-    Dataset.sub_period,
-)
-Dataset.updateFromTimeSeries = deprecate(
-    'updateFromTimeSeries',
-    Dataset.update_from_time_series,
-)
-Dataset.updateFromDataset = deprecate(
-    'updateFromDataset',
-    Dataset.update_from_dataset,
-)
-Dataset.addNewStations = deprecate(
-    'addNewStations',
-    Dataset.add_new_stations,
-)
 
 
 def delta_tool_formatting(dataset_dict, output_dir):
@@ -492,7 +463,6 @@ def delta_tool_formatting(dataset_dict, output_dir):
         )
 
 
-@deprecate_attrs(start_date='startDate', end_date='endDate')
 class Store(object):
     """
     Tool designed for storing time series data in netcdf format.
@@ -513,7 +483,6 @@ class Store(object):
         'station_id': 'station_id',
     }
 
-    @deprecate_kwarg('seriesType', 'series_type')
     def __init__(self, file_path, group=None, read_only=False,
                  dim_names={}, coord_var_names={}, series_type='hourly'):
         """
@@ -626,9 +595,6 @@ class Store(object):
         return self.nc_group.variables[self.coord_var_names['station_id']]
 
     @classmethod
-    @deprecate_kwarg('startDate', 'start_date')
-    @deprecate_kwarg('endDate', 'end_date', stacklevel=3)
-    @deprecate_kwarg('seriesType', 'series_type', stacklevel=4)
     def new_file(cls, file_path, stations, start_date, end_date, group=None,
                  dim_names={}, coord_var_names={}, series_type='hourly',
                  step=1):
@@ -690,9 +656,6 @@ class Store(object):
                    series_type=series_type)
 
     @classmethod
-    @deprecate_kwarg('startDate', 'start_date')
-    @deprecate_kwarg('endDate', 'end_date', stacklevel=3)
-    @deprecate_kwarg('seriesType', 'series_type', stacklevel=4)
     def new_group(cls, file_path, stations, start_date, end_date, group,
                   dim_names={}, coord_var_names={}, series_type='hourly',
                   step=1):
@@ -751,9 +714,6 @@ class Store(object):
                    series_type=series_type)
 
     @classmethod
-    @deprecate_kwarg('startDate', 'start_date')
-    @deprecate_kwarg('endDate', 'end_date', stacklevel=3)
-    @deprecate_kwarg('seriesType', 'series_type', stacklevel=4)
     def _init_dimensions(cls, nc_group, stations, start_date, end_date,
                          dim_names, coord_var_names, series_type,
                          step=1):
@@ -931,9 +891,6 @@ class Store(object):
 
         # self.stations[nsta:] = np.array(new_stations)
 
-    @deprecate_kwarg('startDate', 'start_date')
-    @deprecate_kwarg('endDate', 'end_date', stacklevel=3)
-    @deprecate_kwarg('seriesType', 'series_type', stacklevel=4)
     def get_dataset(self, name, dataset_name=None, start_date=None,
                     end_date=None, stations=None, metadata_var={},
                     series_type='hourly', step=1, keep_dup_sta='first'):
@@ -1108,9 +1065,6 @@ class Store(object):
         self.nc_group.variables[name][idx] = np.ma.array(df.values)
 
 
-@deprecate_kwarg('startDate', 'start_date')
-@deprecate_kwarg('endDate', 'end_date', stacklevel=3)
-@deprecate_kwarg('seriesType', 'series_type', stacklevel=4)
 def time_range(start_date, end_date, series_type, step=1):
     """
     Create a time range.
@@ -1144,9 +1098,3 @@ def time_range(start_date, end_date, series_type, step=1):
         end=datetime.combine(end_date, time(23)),
         freq=freq)
     return times
-
-
-timeRange = deprecate(
-    'timeRange',
-    time_range,
-)

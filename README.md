@@ -26,7 +26,7 @@ pip3 install -r optional-requirements.txt
 ```
 which are dependencies needed for plotting maps or build the documentation.
 
-The version numbers specified inside these two requirement files are the one
+The version numbers specified inside these two requirement files are the ones
 that have been used to test the library.
 
 Then, go to the package directory and execute
@@ -37,7 +37,8 @@ pip3 install . --no-build-isolation
 
 ## Documentation
 
-Online doc of the latest release on master branch is available at https://umr-cnrm.github.io/EvalTools
+Online doc of the latest release on master branch is available at
+https://umr-cnrm.github.io/EvalTools
 
 To compile html documentation, draw example charts with
 

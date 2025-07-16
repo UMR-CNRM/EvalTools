@@ -271,7 +271,7 @@ print("score_quartiles")
 evt.plotting.plot_score_quartiles(
     list(objs.values()), xscore='FGE', yscore='SpearmanR',
     colors=['#CB025A', '#004D8A'], forecast_day=0, labels=None,
-    outputCSV=None, invert_xaxis=True, invert_yaxis=False, xmin=None,
+    output_csv=None, invert_xaxis=True, invert_yaxis=False, xmin=None,
     xmax=1, ymin=0, ymax=None, file_formats=['png'], black_axes=True,
     output_file="../doc/source/charts/score_quartiles",
 )
@@ -301,9 +301,10 @@ evt.plotting.plot_significant_differences(
 
 print("diurnal_cycle")
 evt.plotting.plot_diurnal_cycle(
-    list(objs.values()), station_list=stations.index[:3],
+    list(objs.values()), station_list=None,
     title="Diurnal Cycle\n\n", file_formats=['png'], black_axes=True,
     output_file="../doc/source/charts/diurnal_cycle",
+    plot_type='mean',
 )
 evt.plotting.plot_diurnal_cycle(
     list(objs.values()), station_list=stations.index[:3],
@@ -416,7 +417,7 @@ evt.tables.average_scores(
 print("tables.exceedances_scores")
 evt.tables.exceedances_scores(
     daily_objs.values(), forecast_day=0, thresholds=[20, 30, 40],
-    outputFile=None, labels=None)
+    output_file=None, labels=None)
 
 print("bar_scores")
 evt.plotting.plot_bar_scores(
@@ -557,4 +558,24 @@ evt.plotting.plot_bar_scores_conc(
     based_on='obs',
     bar_kwargs={},
     annotation=None,
+)
+
+print("yearly_fairmode_summary")
+with plt.style.context('default'):
+    evt.fairmode.plot_yearly_fairmode_summary(
+        objs['ENS'],
+        output_file="../doc/source/charts/yearly_fairmode_summary",
+    )
+
+print("scatter_diagram")
+with plt.rc_context({'figure.figsize': (11, 5)}):
+    evt.fairmode.plot_scatter_diagram(
+        objs['ENS'],
+        output_file="../doc/source/charts/scatter_diagram",
+    )
+
+print("dynamic_indicator")
+evt.plotting.plot_dynamic_indicator_day_night(
+    obj,
+    output_file="../doc/source/charts/dynamic_indicator_day_night",
 )

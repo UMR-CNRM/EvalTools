@@ -5,14 +5,8 @@
 
 from datetime import date, timedelta
 import evaltools as evt
-from evaltools._deprecate import deprecate_kwarg
-from evaltools._deprecate import deprecate_attrs
 
 
-@deprecate_attrs(
-    start_date='startDate',
-    end_date='endDate',
-)
 class Quarter(object):
     """
     Year quarter.
@@ -24,8 +18,6 @@ class Quarter(object):
 
     """
 
-    @deprecate_kwarg('startDate', 'start_date')
-    @deprecate_kwarg('endDate', 'end_date', stacklevel=3)
     def __init__(self, start_date, end_date):
         """
         Quarter constructor.

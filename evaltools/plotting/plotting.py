@@ -12,6 +12,7 @@ from copy import deepcopy
 import numpy as np
 import pandas as pd
 
+from math import ceil
 from scipy.stats import gaussian_kde, ttest_ind, mannwhitneyu
 from scipy.stats import scoreatpercentile
 
@@ -23,7 +24,6 @@ from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 import evaltools as evt
 import evaltools.translation as tr
-from evaltools._deprecate import deprecate_kwarg
 from . import _mpl
 from ._utils import plot_func, IMPLEMENTED_PLOTS
 
@@ -390,8 +390,6 @@ def _compute_kde(data, bw_method=None):
     return res
 
 
-@deprecate_kwarg('forecastDay', 'forecast_day')
-@deprecate_kwarg('outputFile', 'output_file', stacklevel=3)
 @plot_func
 def plot_data_density(
         objects, forecast_day=0, labels=None, colors=None,
@@ -628,8 +626,6 @@ def plot_score_density(
     return fig, ax
 
 
-@deprecate_kwarg('forecastDay', 'forecast_day')
-@deprecate_kwarg('outputFile', 'output_file', stacklevel=3)
 def plot_station_score_density(
         objects, score, forecast_day=0, availability_ratio=0.75,
         labels=None, colors=None, linestyles=None,
@@ -841,9 +837,6 @@ def plot_station_score_box(
     )
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('score_names', 'score_name', stacklevel=4)
 def plot_mean_time_scores(
         objects, score, score_name=None,
         min_nb_sta=10, availability_ratio=0.75,
@@ -953,9 +946,6 @@ def plot_mean_time_scores(
     )
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('score_names', 'score_name', stacklevel=4)
 def plot_median_station_scores(
         objects, score, score_name=None,
         min_nb_sta=10, availability_ratio=0.75,
@@ -1213,11 +1203,6 @@ def plot_average_ft_scores(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('boundary_resolution', 'bnd_resolution', stacklevel=4)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=5)
-@deprecate_kwarg('interp2D', 'interp2d', stacklevel=6)
 def plot_station_scores(
         obj, score, ref=None, forecast_day=0, output_file=None, title="",
         bbox=None, file_formats=['png'], point_size=5,
@@ -1513,9 +1498,6 @@ def plot_station_scores(
 IMPLEMENTED_PLOTS['station_scores'] = plot_station_scores
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('score_names', 'score_name', stacklevel=4)
 @plot_func
 def plot_time_scores(
         objects, score, term, hourly_timeseries=False, min_nb_sta=10,
@@ -1673,7 +1655,6 @@ def plot_time_scores(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
 @plot_func
 def plot_quarterly_score(
         files, labels, score, first_quarter=None, last_quarter=None,
@@ -1789,9 +1770,6 @@ def plot_quarterly_score(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=3)
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=4)
 @plot_func
 def plot_taylor_diagram(
         objects, forecast_day=0, norm=True, colors=None, markers=None,
@@ -1929,9 +1907,6 @@ def plot_taylor_diagram(
     return fig, ax
 
 
-@deprecate_kwarg('forecastDay', 'forecast_day')
-@deprecate_kwarg('outputFile', 'output_file', stacklevel=3)
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=4)
 @plot_func
 def plot_score_quartiles(
         objects, xscore, yscore,
@@ -2092,9 +2067,6 @@ def plot_score_quartiles(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
 @plot_func
 def plot_time_series(
         objects, station_list=None, start_end=None, forecast_day=0,
@@ -2212,6 +2184,7 @@ def plot_time_series(
                 [], [],
                 color=c,
                 label=lb,
+                marker=m,
                 ls='-' if envelope else ls,
             )
         )
@@ -2343,10 +2316,6 @@ def plot_time_series(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
-@deprecate_kwarg('xticksLabels', 'xtick_labels', stacklevel=5)
 @plot_func
 def plot_bar_scores(
         objects, score, forecast_day=0, averaging='mean', title="",
@@ -2516,9 +2485,6 @@ def plot_bar_scores(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
 @plot_func
 def plot_bar_exceedances(
         obj, threshold, data="obs", start_end=None, forecast_day=0,
@@ -2682,9 +2648,6 @@ def plot_bar_exceedances(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
 @plot_func
 def plot_line_exceedances(
         objects, threshold, start_end=None, forecast_day=0,
@@ -2836,9 +2799,6 @@ def plot_line_exceedances(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
 @plot_func
 def plot_bar_contingency_table(
         objects, threshold, forecast_day=0, start_end=None, title="",
@@ -2921,16 +2881,13 @@ def plot_bar_contingency_table(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
-@deprecate_kwarg('xticksLabels', 'xtick_labels', stacklevel=5)
 @plot_func
 def plot_bar_scores_conc(
         objects, score, conc_range, forecast_day=0, averaging='mean',
         title=None, labels=None, colors=None, xtick_labels=None,
         min_nb_val=10, based_on='obs', bar_kwargs={},
-        nb_vals=True, output_csv=None, fig=None, ax=None):
+        nb_vals=True, output_csv=None, ymin=None, ymax=None,
+        fig=None, ax=None):
     """
     Barplot for scores per concentration class.
 
@@ -2970,6 +2927,8 @@ def plot_bar_scores_conc(
     nb_vals : boolean
         Whether the number of computed values for each bar must be displayed
         or not.
+    ymin, ymax : None or scalar
+        Limits of the vertical axis.
     output_csv : str or None
         File where to save the data. The file name can contain {score}
         instead of the score name.
@@ -3054,6 +3013,8 @@ def plot_bar_scores_conc(
         title_kw=dict(label=title, pad=25),
         ylabel=score,
         xticks_kw=dict(rotation=30, ha='right'),
+        ymin=ymin,
+        ymax=ymax,
     )
 
     if output_csv is not None:
@@ -3095,8 +3056,6 @@ def plot_bar_scores_conc(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=3)
 @plot_func
 def plot_roc_curve(
         objects, thresholds, forecast_day=0,
@@ -3201,8 +3160,6 @@ def plot_roc_curve(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=3)
 @plot_func
 def plot_performance_diagram(
         objects, threshold, forecast_day=0,
@@ -3362,8 +3319,6 @@ def plot_performance_diagram(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
 @plot_func
 def plot_diurnal_cycle(
         objects, station_list=None, availability_ratio=0.75,
@@ -3471,7 +3426,7 @@ def plot_diurnal_cycle(
             data = df.quantile(quant, axis=0).T
 
         elif plot_type == 'mean':
-            data = df.mean(axis=0)
+            data = df.mean(axis=0).to_frame(name='mean')
             if envelope is True:
                 linestyles = ['-', '--', '--']
                 df_std = df.std(axis=0)
@@ -3524,9 +3479,7 @@ def plot_diurnal_cycle(
         data = df.quantile(quant, axis=0).T
 
     elif plot_type == 'mean':
-        data = df.mean(axis=0).to_frame()
-        data.name = 'mean'
-        data = data.to_frame()
+        data = df.mean(axis=0).to_frame(name='mean')
         if envelope is True:
             linestyles = ['-', '--', '--']
             df_std = df.std(axis=0)
@@ -3575,9 +3528,6 @@ def plot_diurnal_cycle(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
 @plot_func
 def plot_comparison_scatter_plot(
         score, xobject, yobject, forecast_day=0, title="", xlabel=None,
@@ -3715,8 +3665,6 @@ def plot_comparison_scatter_plot(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=3)
 @plot_func
 def plot_significant_differences(
         score_list, former_objects, later_objects,
@@ -3882,9 +3830,6 @@ def plot_significant_differences(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
 @plot_func
 def plot_values_scatter_plot(
         obj, station_list=None, start_end=None, forecast_day=0, title="",
@@ -4016,8 +3961,6 @@ def plot_values_scatter_plot(
     return fig, ax
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=3)
 @plt.rc_context({'figure.autolayout': False})
 def plot_summary_bar_chart(
         objects_lol, forecast_day=0, averaging='mean', mean_obs=True,
@@ -4294,9 +4237,6 @@ plot_bb = plot_summary_bar_chart
 IMPLEMENTED_PLOTS['summary_bar_chart'] = plot_summary_bar_chart
 
 
-@deprecate_kwarg('outputFile', 'output_file')
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=3)
-@deprecate_kwarg('forecastDay', 'forecast_day', stacklevel=4)
 def plot_exceedances_scores(
         objects, threshold, score_list=None, forecast_day=0, title="",
         labels=None, colors=None, subregions=None, subregion_labels=None,
@@ -4465,3 +4405,298 @@ def plot_exceedances_scores(
                 )
 
     return figs
+
+
+def _plot_dynamic_indicator(
+        data, xlabel, ylabel, title, xmax, annotate_sta,
+        black_axes, output_file, output_csv, color_by, fig, ax):
+
+    # save data
+    if output_csv is not None:
+        with open(output_csv, 'w', encoding="utf-8") as f:
+            f.write(data.to_string())
+
+    # define point color in data['z']
+    if color_by is None:
+        # remove nan to compute gaussian_kde
+        idx_not_nan = ~data.isna().any(axis=1)
+        xy = data[[xlabel, ylabel]].loc[idx_not_nan].values.T.astype('float')
+        try:
+            z = gaussian_kde(xy)(xy)
+            z = pd.DataFrame(z, index=idx_not_nan[idx_not_nan].index,
+                             columns=['z'])
+            data['z'] = np.nan
+            data.update(z)
+            # sort points by density (=> densest points are plotted last)
+            data.sort_values(by='z', inplace=True)
+        except np.linalg.linalg.LinAlgError:
+            data['z'] = 'blue'
+    else:
+        data['z'] = pd.Series(color_by)
+        data.sort_values(by='z', inplace=True)
+
+    # plotting
+    fig = fig or plt.figure()
+    ax = ax or fig.add_subplot(1, 1, 1)
+
+    ax.scatter(
+        data[xlabel], data[ylabel], c=data['z'], s=50,
+        edgecolors='none', zorder=10,
+    )
+
+    if annotate_sta:
+        for sta, row in data.iterrows():
+            annotation = sta + '\n(' + str(round(row[xlabel], 1)) \
+                              + ', ' + str(round(row[ylabel], 1)) + ')'
+            ax.annotate(
+                annotation,
+                xy=(row[xlabel], row[ylabel]),
+                fontsize=8,
+            )
+
+    # line y = x
+    ax.add_artist(plt.axline((0, 0), slope=1, color='k', lw=1, ls='--'))
+
+    # min max values
+    if xmax is None:
+        minval = np.nanmin(data)
+        maxval = np.nanmax(data)
+        xmax = ceil(max([abs(minval), maxval]) + 0.2)
+
+    if black_axes:
+        ax.hlines(0, -xmax, xmax, ls='-', color='grey')
+        ax.vlines(0, -xmax, xmax, ls='-', color='grey')
+    ax.annotate('dMod>dObs', xy=(0, 1), xytext=(10, -10),
+                va='top', ha='left', fontsize=10, weight='bold',
+                xycoords='axes fraction', textcoords='offset points')
+    ax.annotate('dMod<dObs', xy=(1, 0), xytext=(-10, 10),
+                va='bottom', ha='right', fontsize=10, weight='bold',
+                xycoords='axes fraction', textcoords='offset points')
+
+    _mpl.set_axis_elements(
+        ax,
+        title=title,
+        xlabel=xlabel,
+        ylabel=ylabel,
+        # black_axes=black_axes,
+        xmin=-xmax,
+        xmax=xmax,
+        ymin=-xmax,
+        ymax=xmax,
+    )
+
+    ax.set_axisbelow(True)
+
+    if output_file is not None:
+        fig.savefig(output_file)
+
+    return fig, ax
+
+
+def plot_dynamic_indicator_day_night(
+        obj, forecast_day=0, title="",
+        availability_ratio=0.75,
+        black_axes=True, color_by=None,
+        xmax=None, annotate_sta=False,
+        output_file=None, output_csv=None,
+        file_formats=['png'],
+        fig=None, ax=None):
+    """
+    Scatter plot to compare the delta (day hours - night hours).
+
+    By default, points are colored according to the density of points.
+
+    Parameters
+    ----------
+    obj : evaltools.Evaluator object
+        Object used for plotting.
+    forecast_day : int
+        Integer corresponding to the chosen forecast day used for plotting.
+    title : str
+        Title for the plots. It must contain {score} instead of the
+        score name.
+    black_axes : bool
+        If true, y=0 and x=0 lines are painted in black.
+    color_by : None or dictionary
+        Dictionary with keys corresponding to station names and
+        values corresponding to colors.
+    xmax : None or scalar
+        Max limit of the axes.
+    annotate_sta : bool
+        If True, annotate each point with station name and day-night
+        values (obs, mod).
+    output_file : str or None
+        File where to save the plots (without extension). If None, the figure
+        is shown in a popping window. If subregions is not None, it must
+        contain '{score}' instead of the score name.
+    output_csv : str or None
+        File where to save the data. The file name must contain {score}
+        instead of the score name.
+    file_formats : list of str
+        List of file extensions.
+
+    Returns
+    -------
+    List of couples (matplotlib.figure.Figure, matplotlib.axes._axes.Axes)
+        Figure and Axes objects corresponding to each plots. Note that if the
+        plots have been shown in the user interface window, these figures and
+        axes will not be usable again.
+
+    """
+    ylabel = "delta_mod (day-night)"
+    xlabel = "delta_obs (day-night)"
+
+    # define day and night hours
+    night = [x for x in range(0, 8)] + [x for x in range(20, 25)]
+    day = [x for x in range(8, 20)]
+
+    # drop stations with too few data
+    obj.colocate_nan()
+    obj.simulations.drop_unrepresentative_stations(availability_ratio)
+    obj.observations.drop_unrepresentative_stations(availability_ratio)
+
+    # get data
+    obs = obj.get_obs(forecast_day=forecast_day)
+    sim = obj.get_sim(forecast_day=forecast_day)
+
+    # Build dataframe with hourly data
+    data = pd.DataFrame({xlabel: obs.unstack(), ylabel: sim.unstack()})
+    data = data.reset_index(level=1)
+    data = data.rename(columns={'level_1': 'Datetimes'})
+
+    # Add columns for date and night/day hours (for groupby)
+    data['Dates'] = data['Datetimes'].dt.date
+    data['Night'] = data.apply(
+        lambda x: (
+            'night' if x['Datetimes'].hour in night
+            else ('day' if x['Datetimes'].hour in day else 0)
+        ),
+        axis=1,
+    )
+    # Drop useless column
+    data.drop('Datetimes', axis=1, inplace=True)
+    # Group by station, date, and night/day hour (compute mean)
+    data = data.groupby([data.index, "Dates", "Night"]).mean()
+    # Compute diff between night and day averages
+    data = data.groupby(level=[0, 1]).diff().dropna()
+    # Invert to (day - night) diff if needed
+    if data.index.get_level_values(2).unique().values == ['night']:
+        data = -1 * data
+    data = data.droplevel(2)
+
+    # Compute mean of all dates
+    data = data.groupby(level=0).mean()
+
+    fig, ax = _plot_dynamic_indicator(
+                    data, xlabel, ylabel, title, xmax, annotate_sta,
+                    black_axes, output_file, output_csv, color_by, fig, ax)
+
+    return fig, ax
+
+
+def plot_dynamic_indicator_day_week(
+        obj, forecast_day=0, title="",
+        availability_ratio=0.75,
+        black_axes=True, color_by=None,
+        xmax=None, annotate_sta=False,
+        output_file=None, output_csv=None,
+        file_formats=['png'],
+        fig=None, ax=None):
+    """Scatter plot to compare the delta (weekdays - weekend)."""
+    ylabel = "delta_mod (weekdays-weekend)"
+    xlabel = "delta_obs (weekdays-weekend)"
+
+    # drop stations with too few data
+    obj.colocate_nan()
+    obj.simulations.drop_unrepresentative_stations(availability_ratio)
+    obj.observations.drop_unrepresentative_stations(availability_ratio)
+
+    # get data
+    obs = obj.get_obs(forecast_day=forecast_day)
+    sim = obj.get_sim(forecast_day=forecast_day)
+
+    # Build dataframe with hourly data
+    data = pd.DataFrame({xlabel: obs.unstack(), ylabel: sim.unstack()})
+    data = data.reset_index(level=1)
+    data = data.rename(columns={'level_1': 'Datetimes'})
+
+    # Add columns for weekdays (for groupby)
+    data['Weekday'] = data['Datetimes'].dt.weekday  # 0 = Monday, 6 = Sunday
+    data['Weekday'] = data.apply(
+        lambda x: 'weekend' if x['Weekday'] in [5, 6] else 'weekday',
+        axis=1,
+    )
+    # Drop useless column
+    data.drop('Datetimes', axis=1, inplace=True)
+    # Group by station and week day (compute mean)
+    data = data.groupby([data.index, "Weekday"]).mean()
+    # Compute diff between weekday and weekend averages
+    data = data.groupby(level=[0]).diff().dropna()
+    # Invert to (weekday - weekend) diff if needed
+    if data.index.get_level_values(1).unique().values == ['weekend']:
+        data = -1 * data
+    data = data.droplevel(1)
+
+    fig, ax = _plot_dynamic_indicator(
+                    data, xlabel, ylabel, title, xmax, annotate_sta,
+                    black_axes, output_file, output_csv, color_by, fig, ax)
+
+    return fig, ax
+
+
+def plot_dynamic_indicator_summer_winter(
+        obj, forecast_day=0, title="",
+        availability_ratio=0.75,
+        black_axes=True, color_by=None,
+        xmax=None, annotate_sta=False,
+        output_file=None, output_csv=None,
+        file_formats=['png'],
+        fig=None, ax=None):
+    """Scatter plot to compare the delta (summer - winter)."""
+    ylabel = "delta_mod (summer-winter)"
+    xlabel = "delta_obs (summer-winter)"
+
+    # Define summer and winter months
+    summer = [6, 7, 8]
+    winter = [1, 2, 12]
+
+    # drop stations with too few data
+    obj.colocate_nan()
+    obj.simulations.drop_unrepresentative_stations(availability_ratio)
+    obj.observations.drop_unrepresentative_stations(availability_ratio)
+
+    # get data
+    obs = obj.get_obs(forecast_day=forecast_day)
+    sim = obj.get_sim(forecast_day=forecast_day)
+
+    # Build dataframe with hourly data
+    data = pd.DataFrame({xlabel: obs.unstack(), ylabel: sim.unstack()})
+    data = data.reset_index(level=1)
+    data = data.rename(columns={'level_1': 'Datetimes'})
+
+    # Add column for summer/winter period (for groupby)
+    data['Period'] = data['Datetimes'].dt.month  # 1 = January, 12 = December
+    data['Period'] = data.apply(
+        lambda x: (
+            'summer' if x['Period'] in summer
+            else ('winter' if x['Period'] in winter else 0)
+        ),
+        axis=1,
+    )
+    # Drop useless column
+    data.drop('Datetimes', axis=1, inplace=True)
+    # Group by station and period (compute mean)
+    data = data.groupby([data.index, "Period"]).mean()
+    data.drop(0, level=1, inplace=True)  # drop months outside summer/winter
+    # Compute diff between summer and winter averages
+    data = data.groupby(level=[0]).diff().dropna()
+    # Invert to (summer - winter) diff if needed
+    if data.index.get_level_values(1).unique().values == ['winter']:
+        data = -1 * data
+    data = data.droplevel(1)
+
+    fig, ax = _plot_dynamic_indicator(
+                    data, xlabel, ylabel, title, xmax, annotate_sta,
+                    black_axes, output_file, output_csv, color_by, fig, ax)
+
+    return fig, ax

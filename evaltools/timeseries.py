@@ -11,11 +11,8 @@ import sys
 import warnings
 
 import evaltools as evt
-from evaltools._deprecate import deprecate
-from evaltools._deprecate import deprecate_kwarg
 
 
-@deprecate_kwarg('seriesType', 'series_type')
 def readtimeseries(start_date, end_date, lag, lfiles, correc_unit=1,
                    series_type='hourly', keep='last', step=1):
     """
@@ -184,7 +181,6 @@ def readbigtimeseries(start_date, end_date, lag, fichier, series_type,
     return file_data
 
 
-@deprecate_kwarg('stationsIdx', 'stations_idx')
 def get_df(stations_idx, generic_file_path, start_date, end_date, lag,
            correc_unit=1, series_type='hourly', keep='last', step=1):
     """
@@ -268,12 +264,6 @@ def get_df(stations_idx, generic_file_path, start_date, end_date, lag,
         )
 
     return df
-
-
-get_DF = deprecate(
-    'get_DF',
-    get_df,
-)
 
 
 def daily_mean(df, availability_ratio=0.75):

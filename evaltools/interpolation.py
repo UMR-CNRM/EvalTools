@@ -15,7 +15,6 @@ from functools import reduce
 from math import ceil, floor
 
 import evaltools as evt
-from evaltools._deprecate import deprecate_kwarg
 
 
 class Grid(object):
@@ -26,12 +25,6 @@ class Grid(object):
 
     """
 
-    @deprecate_kwarg('minLat', 'min_lat')
-    @deprecate_kwarg('minLon', 'min_lon', stacklevel=3)
-    @deprecate_kwarg('dLon', 'd_lon', stacklevel=4)
-    @deprecate_kwarg('dLat', 'd_lat', stacklevel=5)
-    @deprecate_kwarg('nbLon', 'nb_lon', stacklevel=6)
-    @deprecate_kwarg('nbLat', 'nb_lat', stacklevel=7)
     def __init__(self, min_lat, min_lon, d_lon, d_lat, nb_lon, nb_lat):
         """
         Class constructor.
@@ -245,16 +238,6 @@ class Grid(object):
         return res
 
 
-@deprecate_kwarg('minLat', 'min_lat')
-@deprecate_kwarg('minLon', 'min_lon', stacklevel=3)
-@deprecate_kwarg('dLon', 'd_lon', stacklevel=4)
-@deprecate_kwarg('dLat', 'd_lat', stacklevel=5)
-@deprecate_kwarg('maxLat', 'max_lat', stacklevel=6)
-@deprecate_kwarg('maxLon', 'max_lon', stacklevel=7)
-@deprecate_kwarg('obsLat', 'obs_lat', stacklevel=8)
-@deprecate_kwarg('obsLon', 'obs_lon', stacklevel=9)
-@deprecate_kwarg('nbLon', 'nb_lon', stacklevel=10)
-@deprecate_kwarg('invertLat', 'invert_lat', stacklevel=11)
 def find_nearest(
         obs_lat, obs_lon, max_lat, min_lat, max_lon, min_lon, d_lon, d_lat,
         nb_lon, invert_lat=True):

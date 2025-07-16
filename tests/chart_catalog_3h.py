@@ -215,7 +215,7 @@ print("score_quartiles")
 evt.plotting.plot_score_quartiles(
     list(objs.values()), xscore='FGE', yscore='SpearmanR',
     colors=['#CB025A', '#004D8A'], forecast_day=0, labels=None,
-    outputCSV=None, invert_xaxis=True, invert_yaxis=False, xmin=None,
+    output_csv=None, invert_xaxis=True, invert_yaxis=False, xmin=None,
     xmax=1, ymin=0, ymax=None, file_formats=['png'], black_axes=True,
     output_file="../doc/source/charts/score_quartiles_3h",
 )
@@ -359,7 +359,7 @@ evt.tables.average_scores(
 print("tables.exceedances_scores")
 evt.tables.exceedances_scores(
     daily_objs.values(), forecast_day=0, thresholds=[20, 30, 40],
-    outputFile=None, labels=None)
+    output_file=None, labels=None)
 
 print("bar_scores")
 evt.plotting.plot_bar_scores(

@@ -21,7 +21,6 @@ import matplotlib.lines as mlines
 import evaltools as evt
 from .evaluator import Evaluator
 from .plotting._utils import plot_func
-from ._deprecate import deprecate_kwarg, deprecate
 
 
 def _add_method(cls):
@@ -190,7 +189,6 @@ def rmsu(self, threshold=.75, forecast_day=0):
         score_list=['RMSE'],
         axis=0,
         threshold=threshold,
-        keep_nan=True,
     )
     res.columns = ['RMSU']
     return res.RMSU
@@ -221,7 +219,6 @@ def mqi(self, threshold=.75, forecast_day=0):
     rmse = evt.scores.stats2d(
         obs, sim, score_list=['RMSE'], axis=0,
         threshold=threshold,
-        keep_nan=True,
     )
     rmsu = self.rmsu(threshold=threshold, forecast_day=forecast_day)
     res = rmse.RMSE/(self._fairmode_params['beta']*rmsu)
@@ -259,6 +256,57 @@ def mqi90(self, threshold=.75, forecast_day=0):
 
 
 @_add_fairmode_method
+def mqi_y(self, availability_ratio=.75, forecast_day=0):
+    """
+    Calculate the MQIs for the average of model values.
+
+    The period over which to average the data should preferably be one year.
+
+    Parameters
+    ----------
+    availability_ratio : float
+        Minimal rate of data available on the period required per
+        forecast day to compute the scores for each station.
+    forecast_day : int
+        Forecast day corresponding to the data used in the calculation.
+
+    Returns
+    -------
+    pandas.Series
+        Series with index corresponding to the object stations
+        and containing yearly modelling quality incator for each station.
+
+    """
+    obs = self._fairmode_params['obj'].get_obs(forecast_day=forecast_day)
+    sim = self._fairmode_params['obj'].get_sim(forecast_day=forecast_day)
+    scores = evt.scores.stats2d(
+        obs, sim,
+        score_list=[
+            'MeanBias',
+            'obs_mean',
+            'obs_percentile 0.9',
+            'sim_percentile 0.9',
+        ],
+        axis=0,
+        threshold=float(availability_ratio),
+    )
+
+    alpha = self._fairmode_params['alpha']
+    n_p = self._fairmode_params['Np']
+    rv = self._fairmode_params['RV']
+    n_np = self._fairmode_params['Nnp']
+    u95r = self._fairmode_params['u95r']
+    beta = self._fairmode_params['beta']
+
+    u95 = (1-alpha**2)*(scores['obs_mean']**2) / n_p
+    u95 += (alpha**2)*(rv**2)/n_np
+    u95 = u95r*np.sqrt(u95)
+
+    mqi = scores['MeanBias'].abs()/(beta*u95)
+    return mqi
+
+
+@_add_fairmode_method
 def y90(self, availability_ratio=.75, forecast_day=0):
     """
     Calculate the 90th percentile of MQIs for the average of model values.
@@ -280,33 +328,10 @@ def y90(self, availability_ratio=.75, forecast_day=0):
         for yearly average model results.
 
     """
-    obs = self._fairmode_params['obj'].get_obs(forecast_day=forecast_day)
-    sim = self._fairmode_params['obj'].get_sim(forecast_day=forecast_day)
-    scores = evt.scores.stats2d(
-        obs, sim,
-        score_list=[
-            'MeanBias',
-            'obs_mean',
-            'obs_percentile 0.9',
-            'sim_percentile 0.9',
-        ],
-        axis=0,
-        threshold=float(availability_ratio),
-        keep_nan=True,
+    mqi = self.mqi_y(
+        availability_ratio=availability_ratio,
+        forecast_day=forecast_day,
     )
-
-    alpha = self._fairmode_params['alpha']
-    n_p = self._fairmode_params['Np']
-    rv = self._fairmode_params['RV']
-    n_np = self._fairmode_params['Nnp']
-    u95r = self._fairmode_params['u95r']
-    beta = self._fairmode_params['beta']
-
-    u95 = (1-alpha**2)*(scores['obs_mean']**2) / n_p
-    u95 += (alpha**2)*(rv**2)/n_np
-    u95 = u95r*np.sqrt(u95)
-
-    mqi = scores['MeanBias'].abs()/(beta*u95)
     mqi = mqi.dropna().sort_values()
 
     if len(mqi) == 0:
@@ -639,7 +664,6 @@ def plot_fairmode_summary(
             'sim_percentile {}'.format(perc),
         ],
         axis=0, threshold=float(availability_ratio),
-        keep_nan=True,
     )
     u_95 = u95r*np.sqrt(
         (1-alpha**2) *
@@ -970,7 +994,6 @@ def _target_diagram_multi_models(
             score_list=['MeanBias', 'CRMSE', 'PearsonR'],
             axis=0,
             threshold=float(ar),
-            keep_nan=True,
         )
         if sc.isna().all().all():
             print("No valid station !!!")
@@ -1131,12 +1154,6 @@ def _target_diagram_multi_models(
 
 
 @_add_method(Evaluator)
-@deprecate_kwarg('forecastDay', 'forecast_day')
-@deprecate_kwarg('targetFile', 'target_file', stacklevel=3)
-@deprecate_kwarg('summaryFile', 'summary_file', stacklevel=4)
-@deprecate_kwarg('targetTitle', 'target_title', stacklevel=3)
-@deprecate_kwarg('summaryTitle', 'summary_title', stacklevel=4)
-@deprecate_kwarg('outputCSV', 'output_csv', stacklevel=5)
 def fairmode_benchmark(
         self, target_file=None, summary_file=None,
         output_csv=None, availability_ratio=.75, label=None,
@@ -1435,7 +1452,6 @@ def _forecast_target_diagram_multi_models(
             score_list=['RMSE'],
             axis=0,
             threshold=float(availability_ratio),
-            keep_nan=True,
         )
 
         sub_obj = obj.sub_period(obj_pers.start_date, obj_pers.end_date)
@@ -1452,7 +1468,6 @@ def _forecast_target_diagram_multi_models(
             score_list=['MeanBias', 'CRMSE', 'PearsonR', 'RMSE'],
             axis=0,
             threshold=float(availability_ratio),
-            keep_nan=True,
         )
 
         if sc.isna().all().all():
@@ -1623,8 +1638,667 @@ def _forecast_target_diagram_multi_models(
         return fig, ax
 
 
-setattr(
-    Evaluator,
-    'fairmodeBenchmark',
-    deprecate('fairmodeBenchmark', fairmode_benchmark),
-)
+@plt.rc_context({'figure.autolayout': False})
+@plot_func
+def plot_yearly_fairmode_summary(
+        self, availability_ratio=.75, forecast_day=0, title=None, label=None,
+        return_mpc=False, write_categories=True, fig=None, ax=None):
+    """
+    Summary statistics diagram.
+
+    Assessement summary diagram as described in FAIRMODE guidance
+    document on modelling quality objectives and benchmarking.
+
+    Parameters
+    ----------
+    self : evaltools.Evaluator object
+        Object used for plotting.
+    availability_ratio : float
+        Minimal rate of data available on the period required per
+        forecast day to compute the scores for each station.
+    forecast_day : int
+        Forecast day used in the diagram.
+    title : str
+        Diagram title.
+    label : str
+        Label for the default title.
+    write_categories : bool
+        If True, write "observations", "time" and "space" on the left of the
+        plot.
+
+    """
+    def common_params(ax, xmin, xmax, points, mqi=None, sym=True):
+        """
+        Draw common features to all subplots.
+
+        Parameters
+        ----------
+        ax : matplotlib axis
+            Current subplot.
+        xmin, xmax : scalar
+            Limit values for the plot
+        points : 1D array-like
+            Values for the scatter-plot.
+        mqi : scalar
+            Modeling quality indicator. If < 1 for 90% of the stations,
+            mqo is fullfilled (green dot, otherwise red).
+        sym : bool
+            Must be set to True if the subplot statistical indicator
+            can be negative.
+
+        """
+        # plot points
+        ax.scatter(points, np.ones(len(points)), zorder=10)
+        ax.set_xlim(xmin, xmax)
+        ax.set_ylim(ymin, ymax)
+        ax.grid(False, which='both')
+
+        # if points live out of limits, plot a point in the dashed area
+        if (points > xmax).any():
+            ax.scatter(
+                [xmax+(xmax-xmin)*0.04], [1],
+                clip_on=False,
+                c=dot_col,
+            )
+        if (points < xmin).any():
+            ax.scatter(
+                [xmin-(xmax-xmin)*0.04], [1],
+                clip_on=False,
+                c=dot_col,
+            )
+
+        # remove y ticks
+        ax.tick_params(axis='y', which='both', left=False)
+        ax.set_yticks([0])
+        ax.set_yticklabels([""])
+
+        # draw a dashed rectangle at the end of the domain
+        if sym is True:
+            ax.spines['left'].set_visible(False)
+            pol = plt.Polygon(
+                xy=[[xmin, 2],
+                    [xmin-(xmax-xmin)*0.08, 2],
+                    [xmin-(xmax-xmin)*0.08, 0],
+                    [xmin, 0]],
+                closed=False, ls='--',
+                clip_on=False,
+                fc='none',
+                edgecolor='k',
+            )
+            ax.add_patch(pol)
+        ax.spines['right'].set_visible(False)
+        pol = plt.Polygon(
+            xy=[[xmax, 2],
+                [xmax+(xmax-xmin)*0.08, 2],
+                [xmax+(xmax-xmin)*0.08, 0],
+                [xmax, 0]],
+            closed=False,
+            ls='--',
+            clip_on=False,
+            fc='none',
+            edgecolor='k',
+        )
+        ax.add_patch(pol)
+
+        # reduce tick size
+        ax.tick_params(axis='x', labelsize='small')
+
+        # # give more space to y label
+        # box = ax.get_position()
+        # ax.set_position(
+        #     [box.x0+box.width*0.15, box.y0, box.width*0.8, box.height*0.4]
+        # )
+
+        # MQI fulfillment (plot a green or red dot)
+        if mqi is not None:
+            mqo = np.sum(mqi < 1)/float(len(mqi)) >= 0.9
+            col = '#4CFF00'*int(mqo) + 'r'*int(~mqo)
+            ax.scatter(
+                [xmax+(xmax-xmin)*0.15], [1],
+                clip_on=False,
+                c=col,
+                s=100,
+            )
+            return mqo
+
+    if not hasattr(self, 'fairmode_params'):
+        self.set_fairmode_params(availability_ratio)
+
+    if title is None:
+        title = (
+            "{model}\n" +
+            "{spe}\n" +
+            "{start_date} 00UTC to {end_date} 23UTC"
+        ).format(
+            model=label or self.model,
+            spe=self._fairmode_params['species_name'],
+            start_date=self.start_date,
+            end_date=self.end_date,
+        )
+
+    # scores
+    scores = self._fairmode_params['obj'].temporal_scores(
+        score_list=[
+            'MeanBias', 'PearsonR', 'obs_std', 'sim_std',
+            'obs_mean', 'sim_mean',
+        ],
+        availability_ratio=availability_ratio)[f'D{forecast_day}']
+    if scores.isna().all().all():
+        print("No valid stations !!!")
+        if return_mpc:
+            return None, None, None
+        else:
+            return None, None
+
+    beta = self._fairmode_params['beta']
+    u95r = self._fairmode_params['u95r']
+    alpha = self._fairmode_params['alpha']
+    n_p = self._fairmode_params['Np']
+    rv = self._fairmode_params['RV']
+    n_np = self._fairmode_params['Nnp']
+
+    # plotting
+    fig = fig or plt.figure(figsize=(9, 4))
+    ax = ax or fig.add_subplot(1, 1, 1)
+    ax.clear()
+    ax.axis('off')
+
+    # plt.subplots_adjust(left=.25, right=.85)
+
+    plt.title(title)
+    dot_col = "#1F77B4"
+    ymin = 0
+    ymax = 2
+    mpc_dict = {}
+
+    sub_axes = []
+    n_sub_axes = 4
+    lmarg = .18
+    rmarg = .13
+    for i in range(1, n_sub_axes+1):
+        sub_axes.append(
+            ax.inset_axes(
+                [lmarg, 1 - i/n_sub_axes, 1 - lmarg - rmarg, 0.32/n_sub_axes]
+            )
+        )
+
+    valid_stations = scores.index[~scores[scores.keys()[0]].isna()]
+
+    sim = scores['sim_mean']
+    obs = scores['obs_mean']
+    corr = ((np.nanmean((obs-np.nanmean(obs))*(sim-np.nanmean(sim)))) /
+            (np.nanstd(obs)*np.nanstd(sim)))
+    u_95 = u95r*np.sqrt(
+        (1-alpha**2)*(obs**2)/n_p + (alpha**2)*(rv**2)/n_np
+    )
+    rmsu_ = np.sqrt(np.nanmean(u_95**2))
+
+    # ------- obs mean -------
+    ax1 = sub_axes[0]
+    common_params(
+        ax1, xmin=0, xmax=100, points=obs, sym=False,
+    )
+    ax1.set_ylabel(
+        "Observed   \nmean ",
+        labelpad=70,
+        rotation='horizontal',
+        verticalalignment='center',
+        size='small',
+    )
+    ax1.text(105, -2, r"$\mu gm^{-3}$")
+
+    # ------- TIME Bias Norm -------
+    ax3 = sub_axes[1]
+    x = scores['MeanBias']/(beta*rmsu_)
+    mpc = common_params(
+        ax3, xmin=-2, xmax=2, points=x, mqi=np.abs(x).dropna(),
+    )
+    mpc_dict['time_bias'] = mpc
+    ax3.set_ylabel(
+        "Bias Norm",
+        size='small',
+        labelpad=70,
+        rotation='horizontal',
+        verticalalignment='center')
+    # colored areas
+    # rect = plt.Rectangle(
+    #    xy=(-1., 0.), width=2., height=2.,
+    #    edgecolor='none', fc='#FFA500',
+    # )
+    # ax3.add_patch(rect)
+    rect = plt.Rectangle(
+        xy=(-1., 0.), width=2., height=2.,
+        edgecolor='none', fc='#4CFF00',
+    )
+    ax3.add_patch(rect)
+
+    # ------- SPACE Corr Norm -------
+    ax7 = sub_axes[2]
+    x = ((2.*np.nanstd(obs)*np.nanstd(sim)*(1. - corr)) /
+         (beta*rmsu_)**2)
+    mpc = common_params(
+        ax7, xmin=0, xmax=2, points=np.array([x]), sym=False,
+        mqi=np.array([x]),
+    )
+    mpc_dict['spatial_corr'] = mpc
+    ax7.set_ylabel(
+        "1-R Norm",
+        size='small',
+        labelpad=70,
+        rotation='horizontal',
+        verticalalignment='center',
+    )
+    # colored areas
+    rect = plt.Rectangle(
+        xy=(0., 0.), width=1., height=2., edgecolor='none', fc='#FFA500',
+    )
+    ax7.add_patch(rect)
+    rect = plt.Rectangle(
+        xy=(0., 0.), width=.7, height=2., edgecolor='none', fc='#4CFF00',
+    )
+    ax7.add_patch(rect)
+
+    # ------- SPACE StDev Norm -------
+    ax8 = sub_axes[3]
+    x = (np.nanstd(sim)-np.nanstd(obs))/(beta*rmsu_)
+    mpc = common_params(
+        ax8, xmin=-2, xmax=2, points=np.array([x]), mqi=np.abs(np.array([x])),
+    )
+    mpc_dict['spatial_std'] = mpc
+    ax8.set_ylabel(
+        "StDev Norm",
+        size='small',
+        labelpad=70,
+        rotation='horizontal',
+        verticalalignment='center',
+    )
+    ax8.annotate(
+        '{valid}/{all} valid stations'.format(
+            valid=len(valid_stations), all=len(self.stations)),
+        xy=(1, 0), xycoords='axes fraction', fontsize='large',
+        xytext=(40, -20), textcoords='offset points', ha='right',
+        va='top',
+    )
+    # colored areas
+    rect = plt.Rectangle(
+        xy=(-1., 0.), width=2., height=2.,
+        edgecolor='none', fc='#FFA500',
+    )
+    ax8.add_patch(rect)
+    rect = plt.Rectangle(
+        xy=(-.7, 0.), width=1.4, height=2.,
+        edgecolor='none', fc='#4CFF00',
+    )
+    ax8.add_patch(rect)
+
+    if write_categories:
+        ax1.text(-37, -1.3, "-- obs --", rotation='vertical')
+        ax3.text(-37/25-2, -1.3, "-- time --", rotation='vertical')
+        ax7.text(-37/50., -6, "------ space ------", rotation='vertical')
+
+    if return_mpc:
+        return fig, ax, mpc_dict
+    else:
+        return fig, ax
+
+
+@plt.rc_context({"savefig.bbox": 'tight'})
+@plot_func
+def plot_scatter_diagram(
+        obj, availability_ratio=.75, forecast_day=0,
+        label=None, color=None, title=None, output_csv=None,
+        mark_by=None,
+        indicative_color=False, return_mqi=False, fig=None, ax=None):
+    """
+    Plot the assessment target diagram.
+
+    Assessement target diagram as described in FAIRMODE guidance document
+    on modelling quality objectives and benchmarking.
+
+    Parameters
+    ----------
+    obj : evaltools.Evaluator object
+        Object used for plotting.
+    availability_ratio : float
+        Minimal rate of data available on the period required per forecast
+        day to compute the scores for each station.
+    forecast_day : int
+        Forecast day used in the diagram.
+    label : str
+        Label for the legend.
+    color : None or str
+        Point color.
+    title : str
+        Diagram title.
+    output_csv : str or None
+        File where to save the data. The File name must contain {model}
+        instead of the model name (so that one file is written for each
+        object showed on the graph).
+    mark_by : 1D array-like
+        This argument allows to choose different markers for different
+        station groups according to a variable of obj.stations.
+        It must be of length two. First element is the label of the column
+        used to define the markers. Second element is a dictionary defining
+        which marker to use for each possible values.
+        Ex: ('area', {'urb': 's', 'rur': 'o', 'sub': '^'})
+    indicative_color : bool
+        If True, legend labels are green if MQI90 < 1 and Y90 < 1 and
+        else they are red.
+
+    """
+    if not hasattr(obj, '_fairmode_params'):
+        obj.set_fairmode_params(availability_ratio)
+
+    if label is None:
+        label = obj.model
+    if color is None:
+        color = obj.color
+    if title is None:
+        title = (
+            "{model}\n" +
+            "{spe}\n" +
+            "{start_date} 00UTC to {end_date} 23UTC"
+        ).format(
+            model=label,
+            spe=obj._fairmode_params['species_name'],
+            start_date=obj.start_date,
+            end_date=obj.end_date,
+        )
+
+    res = _scatter_diagram_multi_models(
+        [obj],
+        forecast_day=forecast_day, labels=[label], colors=[color],
+        title=title,
+        output_csv=output_csv,
+        mark_by=mark_by, indicative_color=indicative_color,
+        return_mqi=return_mqi, fig=fig, ax=ax,
+    )
+
+    return res
+
+
+def _fill_diag(obj, obsmean, max_val):
+    alpha = obj._fairmode_params['alpha']
+    n_p = obj._fairmode_params['Np']
+    rv = obj._fairmode_params['RV']
+    n_np = obj._fairmode_params['Nnp']
+    u95r = obj._fairmode_params['u95r']
+    beta = obj._fairmode_params['beta']
+
+    xs = np.array([0, max_val])
+    # equation (7) from guide v7.3
+    u95 = (1-alpha**2)*(xs**2) / n_p
+    u95 += (alpha**2)*(rv**2)/n_np
+    u95 = u95r*np.sqrt(u95)
+
+    # equation (6) from guide v7.3
+    y1 = xs + beta * u95
+    y2 = xs - beta * u95
+
+    diagfill = plt.fill_between(
+        xs,
+        y1,
+        y2,
+        color='yellowgreen',
+        edgecolor='k',
+    )
+    diag = plt.axline((0, 0), slope=1, color='k', lw=0.3)
+    return [diag, diagfill]
+
+
+def _scatter_diagram_multi_models(
+        objects, availability_ratio=0.75, forecast_day=0,
+        labels=None, colors=None, title="",
+        mark_by=None,
+        indicative_color=False, output_csv=None,
+        return_mqi=False, fig=None, ax=None):
+    """
+    Plot the assessment target diagram.
+
+    Assessement target diagram as described in FAIRMODE guidance document
+    on modelling quality objectives and benchmarking.
+
+    Parameters
+    ----------
+    objects : list of evaltools.Evaluator objects
+        Evaluator objects used for plotting.
+    availability_ratio : float
+        Minimal rate of data available on the period required per forecast
+        day to compute the scores for each station.
+    forecast_day : int
+        Forecast day used in the diagram.
+    labels : list of str
+        List of labels for the legend (length of the list of labels must be
+        equal to the length of the list of objects).
+    colors : None or list of str
+        Line colors corresponding to each objects.
+    title : str
+        Diagram title.
+    mark_by : 1D array-like
+        This argument allows to choose different markers for different
+        station groups according to a variable of obj.stations.
+        It must be of length two. First element is the label of the column
+        used to define the markers. Second element is a dictionary defining
+        which marker to use for each possible values.
+        Ex: ('area', {'urb': 's', 'rur': 'o', 'sub': '^'})
+    indicative_color : bool
+        If True, legend labels are green if MQI90 < 1 and Y90 < 1 and
+        else they are red.
+    output_csv : str or None
+        File where to save the data. The File name must contain {model}
+        instead of the model name (so that one file is written for each
+        object showed on the graph).
+    output_file : str
+        File where to save the plot (without extension).
+    file_formats : list of str
+        List of file extensions.
+
+    Returns
+    -------
+        Couple (matplotlib.figure.Figure, matplotlib.axes._axes.Axes)
+        | corresponding to the produced plot. Note that if the plot has been
+        | shown in the user interface window, the figure and the axis will not
+        | be usable again.
+
+    """
+    colors = colors or [obj.color for obj in objects]
+    labels = labels or [obj.model for obj in objects]
+
+    # scores
+    scores = objects[0]._fairmode_params['obj'].temporal_scores(
+        score_list=[
+            'MeanBias', 'PearsonR', 'obs_std', 'sim_std',
+            'obs_mean', 'sim_mean',
+        ],
+        availability_ratio=availability_ratio)[f'D{forecast_day}']
+    if scores.isna().all().all():
+        print("No valid stations !!!")
+        if return_mqi:
+            return None, None, None
+        else:
+            return None, None
+
+    sim = scores['sim_mean']
+    obs = scores['obs_mean']
+    max_val = max([np.nanmax(sim), np.nanmax(obs)]) * 1.05
+    for i in range(10):
+        if max_val % 10 != 0:
+            max_val += 1
+
+    fig = fig or plt.figure()
+    ax = ax or fig.add_subplot(1, 1, 1)
+
+    # axes
+    ax.set_xlim(0, max_val)
+    ax.set_ylim(0, max_val)
+    plt.xlabel(r"OBS $\mu g/m^3$")
+    plt.ylabel(r"MOD $\mu g/m^3$")
+    plt.grid(False, which='both')
+
+    # Green diagonal
+    for diag in _fill_diag(objects[0], obs.mean(), max_val):
+        ax.add_artist(diag)
+
+    # scatter plot
+    mqi_colors = []
+    mqi_dict = {}
+    for obj, c, lab in zip(objects, colors, labels):
+        ar = obj._fairmode_params['availability_ratio']
+        # beta = obj._fairmode_params['beta']
+        # rmsu = obj.rmsu(
+        #     threshold=float(ar), forecast_day=forecast_day,
+        # )
+        obs = obj._fairmode_params['obj'].get_obs(forecast_day=forecast_day)
+        sim = obj._fairmode_params['obj'].get_sim(forecast_day=forecast_day)
+        sc = evt.scores.stats2d(
+            obs, sim,
+            score_list=[
+                'MeanBias', 'CRMSE', 'PearsonR', 'sim_mean', 'obs_mean',
+            ],
+            axis=0,
+            threshold=float(ar),
+        )
+        if sc.isna().all().all():
+            print("No valid station !!!")
+            return None, None, None
+        x = sc.obs_mean  # (sc.CRMSE/(beta*rmsu))*signx
+        y = sc.sim_mean  # sc.MeanBias/(beta*rmsu)
+        mqi_y = obj.mqi_y(
+            availability_ratio=float(ar),
+            forecast_day=forecast_day,
+        )
+        diag_pos = 0.9 * x  # beta*rmsu / sc.obs_mean
+        y90 = str(
+            round(
+                obj.y90(
+                    availability_ratio=float(ar),
+                    forecast_day=forecast_day,
+                ),
+                3,
+            )
+        )
+
+        # define scatter plot markers
+        if mark_by is None:
+            markers = None
+        else:
+            markers = [
+                mark_by[1][obj.stations[mark_by[0]][code]]
+                for code in sc.index
+            ]
+            handles = [
+                mlines.Line2D(
+                    [], [],
+                    color='grey',
+                    marker=mark_by[1][key],
+                    label=key,
+                    linestyle='',
+                )
+                for key in mark_by[1]
+            ]
+            legend_markers = plt.legend(handles=handles, loc='upper left')
+            legend_markers.set_zorder(12)
+            ax.add_artist(legend_markers)
+
+        if indicative_color:
+            mqi_colors.append(
+                'red'
+                if float(y90) > 1
+                else 'green'
+            )
+        mqi_dict[obj.model] = {'y90': y90}
+
+        evt.plotting._mpl.mscatter(
+            x, y, ax=ax, m=markers, marker='^', facecolors='none',
+            edgecolors=c,
+            label=lab+"\n($Y_{90}$ = "+y90+")",
+            zorder=10,
+        )
+
+        if output_csv is not None:
+            csv_data = pd.DataFrame({'x': x, 'y': y})
+            csv_data.to_csv(
+                output_csv.format(model=obj.model),
+                sep=' ', na_rep='nan', float_format='%g', header=True,
+                index=True,
+            )
+
+    # legend
+    x_pos = 1.01
+    plt.text(
+        x_pos, 0.99,
+        "$\\alpha$ = {}".format(objects[0]._fairmode_params['alpha']),
+        color='k',
+        verticalalignment='center',
+        horizontalalignment='left',
+        size='medium',
+        transform=ax.transAxes,
+    )
+    plt.text(
+        x_pos, 0.94,
+        "$\\beta$ = {}".format(objects[0]._fairmode_params['beta']),
+        color='k',
+        verticalalignment='center',
+        horizontalalignment='left',
+        size='medium',
+        transform=ax.transAxes,
+    )
+    plt.text(
+        x_pos, 0.90,
+        "RV = {}".format(objects[0]._fairmode_params['RV']),
+        color='k',
+        verticalalignment='center',
+        horizontalalignment='left',
+        size='medium',
+        transform=ax.transAxes,
+    )
+    plt.text(
+        x_pos, 0.85,
+        "$U^{RV}_{95,r}$ = " + str(objects[0]._fairmode_params['u95r']),
+        color='k',
+        verticalalignment='center',
+        horizontalalignment='left',
+        size='medium',
+        transform=ax.transAxes,
+    )
+    plt.text(
+        x_pos, 0.81,
+        "$N_{p}$ = " + str(objects[0]._fairmode_params['Np']),
+        color='k',
+        verticalalignment='center',
+        horizontalalignment='left',
+        size='medium',
+        transform=ax.transAxes,
+    )
+    plt.text(
+        x_pos, 0.77,
+        "$N_{np}$ = " + str(objects[0]._fairmode_params['Nnp']),
+        color='k',
+        verticalalignment='center',
+        horizontalalignment='left',
+        size='medium',
+        transform=ax.transAxes,
+    )
+
+    plt.text(
+        x_pos, 0.65,
+        "{} stations".format(np.sum(~x.isna())),
+        color='k',
+        verticalalignment='center',
+        horizontalalignment='left',
+        size='medium',
+        transform=ax.transAxes,
+    )
+
+    legend = plt.legend(loc='center left', bbox_to_anchor=(1, 0.5))
+    for text, col in zip(legend.get_texts(), mqi_colors):
+        text.set_color(col)
+    ax.add_artist(legend)
+
+    # title
+    plt.title(title, loc='center')
+
+    if return_mqi:
+        return fig, ax, mqi_dict
+    else:
+        return fig, ax
