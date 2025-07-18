@@ -135,3 +135,6 @@ What's new in 2.0.0
   - Fix *plotting.plot_diurnal_cycle* when plot_type argument is 'mean'.
   - New arguments in *plotting.plot_bar_scores_conc*: ymin, ymax.
   - Remove all deprecated variables
+
+What's new in 2.0.1
+  - Fix *plotting.plot_dynamic_indicator_summer_winter* when data is insufficient
