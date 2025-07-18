@@ -16,7 +16,7 @@ from evaltools.dataset import *
 from evaltools.evaluator import *
 import evaltools.sqlite
 
-__version__ = '2.0.0dev'
+__version__ = '2.0.1'
 
 
 class EvaltoolsError(Exception):

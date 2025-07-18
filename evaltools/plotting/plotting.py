@@ -4683,6 +4683,13 @@ def plot_dynamic_indicator_summer_winter(
         ),
         axis=1,
     )
+    if ('summer' not in data['Period'].unique() or
+        'winter' not in data['Period'].unique()):
+        raise evt.EvaltoolsError(
+            f"{obj.start_date} - {obj.end_date} is not a valid date " \
+            + "range for summer-winter difference !!!"
+        )
+
     # Drop useless column
     data.drop('Datetimes', axis=1, inplace=True)
     # Group by station and period (compute mean)
