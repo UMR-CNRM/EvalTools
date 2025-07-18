@@ -404,16 +404,17 @@ class Dataset(object):
         """
         if strict:
             idx = (self.data < threshold)
-            st = 'strictly '
+            st = 'strictly'
         else:
             idx = (self.data <= threshold)
-            st = ''
+            st = 'equal or'
         nb_val_below = np.sum(idx.values)
         if nb_val_below > 0:
-            print(("*** {nb} values {st}below threshold in the dataset !!! " +
+            print(("*** {nb} values {st} below {th} in the dataset !!! " +
                    "values are {action}.").format(
                        nb=nb_val_below,
                        st=st,
+                       th=threshold,
                        action='kept'*(not drop)+'set to np.nan'*drop))
             if file_path is not None:
                 self.data.stack().loc[idx.stack()].to_csv(
@@ -422,7 +423,7 @@ class Dataset(object):
             if drop is True:
                 self.data[idx] = np.nan
         else:
-            print("0 value {st}below {th} in the dataset.".format(
+            print("0 value {st} below {th} in the dataset.".format(
                 st=st,
                 th=threshold))
 
@@ -453,13 +454,14 @@ class Dataset(object):
             st = 'strictly '
         else:
             idx = (self.data >= threshold)
-            st = ''
+            st = 'equal or'
         nb_val_above = np.sum(idx.values)
         if nb_val_above > 0:
-            print(("*** {nb} values {st}above threshold in the dataset !!! " +
+            print(("*** {nb} values {st} above {th} in the dataset !!! " +
                    "values are {action}.").format(
                        nb=nb_val_above,
                        st=st,
+                       th=threshold,
                        action='kept'*(not drop)+'set to np.nan'*drop))
             if file_path is not None:
                 self.data.stack().loc[idx.stack()].to_csv(
@@ -468,7 +470,7 @@ class Dataset(object):
             if drop is True:
                 self.data[idx] = np.nan
         else:
-            print("0 value {st}above {th} in the dataset.".format(
+            print("0 value {st} above {th} in the dataset.".format(
                 st=st,
                 th=threshold))
         if positive:
