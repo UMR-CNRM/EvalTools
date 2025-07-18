@@ -468,6 +468,10 @@ class Observations(object):
         file_path : None or str
             File path where to save the names of stations that exceed
             the threshold.
+        strict : bool
+            If True, strict comparison
+        positive : bool
+            If True, negative values (and zero if strict comparison) are set to nan.
 
         """
         print("Observations threshold exceedances check:")
@@ -1432,6 +1436,10 @@ class Simulations(object):
             File path where to save the names of stations that exceed
             the threshold, the path must contain {forecast_day} instead
             of the forecast day number.
+        strict : bool
+            If True, strict comparison
+        positive : bool
+            If True, negative values (and zero if strict comparison) are set to nan.
 
         """
         for fd in range(self.forecast_horizon):
