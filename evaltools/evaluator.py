@@ -452,7 +452,7 @@ class Observations(object):
             date_format=self.dataset.date_format,
         )
 
-    def check_values(self, threshold, drop=False, file_path=None):
+    def check_values(self, threshold, drop=False, file_path=None, strict=True, positive=False):
         """
         Check if observation values exceed a threshold.
 
@@ -471,7 +471,7 @@ class Observations(object):
 
         """
         print("Observations threshold exceedances check:")
-        self.dataset.check_threshold(threshold, drop, file_path)
+        self.dataset.check_threshold(threshold, drop, file_path, strict, positive)
 
     def persistence_model(self, color='k'):
         """
@@ -1415,7 +1415,7 @@ class Simulations(object):
             new_sim.datasets[fd].data = self.datasets[fd].data.loc[idx]
         return new_sim
 
-    def check_values(self, threshold, drop=False, file_path=None):
+    def check_values(self, threshold, drop=False, file_path=None, strict=True, positive=False):
         """
         Check if observation values exceed a threshold.
 
@@ -1443,6 +1443,8 @@ class Simulations(object):
                 threshold,
                 drop,
                 file_path.format(forecastDay=fd, forecast_day=fd),
+                strict,
+                positive,
             )
 
     def daily_mean(self, availability_ratio=0.75):
