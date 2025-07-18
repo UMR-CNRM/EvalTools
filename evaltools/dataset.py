@@ -382,11 +382,55 @@ class Dataset(object):
 
         store = None
 
-    def check_threshold(self, threshold, drop=False, file_path=None):
+    def check_below_threshold(self, threshold, drop=False, file_path=None, strict=True):
         """
-        Check if values exceed a threshold.
+        Check if values are below a threshold.
 
-        If there are values above the threshold, a message is printed
+        If there are values below the threshold, a message is printed
+        and these values are set to nan if drop == True.
+
+        Parameters
+        ----------
+        threshold : scalar
+            Threshold value.
+        drop : bool
+            If True, values below the threshold are set to nan.
+        file_path : None or str
+            File path where to save the names of stations that are below
+            the threshold.
+        strict : bool
+            If True, strict comparison (< instead of <=)
+
+        """
+        if strict:
+            idx = (self.data < threshold)
+            st = 'strictly '
+        else:
+            idx = (self.data <= threshold)
+            st = ''
+        nb_val_below = np.sum(idx.values)
+        if nb_val_below > 0:
+            print(("*** {nb} values {st}below threshold in the dataset !!! " +
+                   "values are {action}.").format(
+                       nb=nb_val_below,
+                       st=st,
+                       action='kept'*(not drop)+'set to np.nan'*drop))
+            if file_path is not None:
+                self.data.stack().loc[idx.stack()].to_csv(
+                    file_path, sep=' ', na_rep='nan', float_format='%g',
+                    header=False, index=True, date_format=self.date_format)
+            if drop is True:
+                self.data[idx] = np.nan
+        else:
+            print("0 value {st}below {th} in the dataset.".format(
+                st=st,
+                th=threshold))
+
+    def check_threshold(self, threshold, drop=False, file_path=None, strict=True, positive=False):
+        """
+        Check if values exceed a threshold, and are positive (option).
+
+        If there are values above the threshold, or negative (option), a message is printed
         and these values are set to nan if drop == True.
 
         Parameters
@@ -398,14 +442,24 @@ class Dataset(object):
         file_path : None or str
             File path where to save the names of stations that exceed
             the threshold.
+        strict : bool
+            If True, strict comparison
+        positive : bool
+            If True, negative values (and zero if strict comparison) are set to nan.
 
         """
-        idx = (self.data > threshold)
+        if strict:
+            idx = (self.data > threshold)
+            st = 'strictly '
+        else:
+            idx = (self.data >= threshold)
+            st = ''
         nb_val_above = np.sum(idx.values)
         if nb_val_above > 0:
-            print(("*** {nb} values above threshold in the dataset !!! " +
+            print(("*** {nb} values {st}above threshold in the dataset !!! " +
                    "values are {action}.").format(
                        nb=nb_val_above,
+                       st=st,
                        action='kept'*(not drop)+'set to np.nan'*drop))
             if file_path is not None:
                 self.data.stack().loc[idx.stack()].to_csv(
@@ -414,7 +468,11 @@ class Dataset(object):
             if drop is True:
                 self.data[idx] = np.nan
         else:
-            print("0 value above {} in the dataset.".format(threshold))
+            print("0 value {st}above {th} in the dataset.".format(
+                st=st,
+                th=threshold))
+        if positive:
+            self.check_below_threshold(0, drop=drop, file_path=file_path, strict=False)
 
     def nb_values_timeseries(self):
         """Plot number of not nan values."""
