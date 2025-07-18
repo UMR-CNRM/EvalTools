@@ -1,0 +1,801 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Tips &#8212; evaltools 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'source/tips';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Chart catalog" href="catalog.html" />
+    <link rel="prev" title="Tutorial" href="tutorial.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="2.0.1" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.svg" class="logo__image only-light" alt="evaltools 2.0.1 documentation - Home"/>
+    <img src="../_static/logo.svg" class="logo__image only-dark pst-js-only" alt="evaltools 2.0.1 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="guide.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="evaltools.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="guide.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="evaltools.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="tutorial.html"
+                          title="previous chapter">Tutorial</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="catalog.html"
+                          title="next chapter">Chart catalog</a></p>
+  </div></div>
+        <div class="sidebar-primary-item">
+<div id="searchbox"></div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="guide.html" class="nav-link">User guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Tips</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="tips">
+<h1>Tips<a class="headerlink" href="#tips" title="Link to this heading">#</a></h1>
+<section id="saving-evaluator-objects">
+<h2>Saving Evaluator objects<a class="headerlink" href="#saving-evaluator-objects" title="Link to this heading">#</a></h2>
+<p>Evaltools includes a convenient way to save
+<a class="reference internal" href="evaltools.html#evaltools.evaluator.Evaluator" title="evaltools.evaluator.Evaluator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Evaluator</span></code></a> objects
+for later use. Let us create such an object as seen in tutorial:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">evaltools</span> <span class="k">as</span> <span class="nn">evt</span>
+
+<span class="gp">In [2]: </span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span>
+
+<span class="go"># import stations with module utils</span>
+<span class="gp">In [3]: </span><span class="n">stations</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">read_listing</span><span class="p">(</span><span class="s2">&quot;./sample_data/listing&quot;</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">start_date</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">end_date</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">6</span><span class="p">)</span>
+
+<span class="go"># create an object of class Observations with module evaluator</span>
+<span class="gp">In [6]: </span><span class="n">obs</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">Observations</span><span class="o">.</span><span class="n">from_time_series</span><span class="p">(</span>
+<span class="gp">   ...: </span>    <span class="n">generic_file_path</span><span class="o">=</span><span class="s2">&quot;./sample_data/observations/</span><span class="si">{year}</span><span class="s2">_co_</span><span class="si">{station}</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">correc_unit</span><span class="o">=</span><span class="mf">1e9</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">species</span><span class="o">=</span><span class="s1">&#39;co&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">start</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">end</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">stations</span> <span class="o">=</span> <span class="n">stations</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">forecast_horizon</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">   ...: </span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="go"># create an object of class Simulations with module evaluator</span>
+<span class="gp">In [7]: </span><span class="n">sim</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">Simulations</span><span class="o">.</span><span class="n">from_time_series</span><span class="p">(</span>
+<span class="gp">   ...: </span>    <span class="n">generic_file_path</span><span class="o">=</span><span class="p">(</span>
+<span class="gp">   ...: </span>        <span class="s2">&quot;./sample_data/ENSforecast/J</span><span class="si">{forecastDay}</span><span class="s2">/</span><span class="si">{year}</span><span class="s2">_co_</span><span class="si">{station}</span><span class="s2">&quot;</span>
+<span class="gp">   ...: </span>    <span class="p">),</span>
+<span class="gp">   ...: </span>    <span class="n">stations_idx</span><span class="o">=</span><span class="n">stations</span><span class="o">.</span><span class="n">index</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">species</span><span class="o">=</span><span class="s1">&#39;co&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">model</span><span class="o">=</span><span class="s1">&#39;ENS&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">start</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">end</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">forecast_horizon</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">   ...: </span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="go"># create an object of class Evaluator with module evaluator</span>
+<span class="gp">In [8]: </span><span class="n">obj</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">Evaluator</span><span class="p">(</span><span class="n">obs</span><span class="p">,</span> <span class="n">sim</span><span class="p">)</span>
+
+<span class="gp">In [9]: </span><span class="n">obj</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+<span class="go">Model: ENS</span>
+<span class="go">Species: co</span>
+<span class="go">Time step: 1 hour</span>
+<span class="go">Period: 20170601 - 20170606</span>
+<span class="go">Forecast horizon: 2</span>
+<span class="go">Color: k</span>
+<span class="go">Paths :</span>
+<span class="go">- Sim : ./sample_data/ENSforecast/J{forecastDay}/{year}_co_{station}</span>
+<span class="go">- Obs : ./sample_data/observations/{year}_co_{station}</span>
+</pre></div>
+</div>
+<p>Once we have an <a class="reference internal" href="evaltools.html#evaltools.evaluator.Evaluator" title="evaltools.evaluator.Evaluator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Evaluator</span></code></a> object, it
+is possible to save it using
+<a class="reference internal" href="evaltools.html#evaltools.evaluator.Evaluator.dump" title="evaltools.evaluator.Evaluator.dump"><code class="xref py py-func docutils literal notranslate"><span class="pre">evaluator.Evaluator.dump</span></code></a> method.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">obj</span><span class="o">.</span><span class="n">dump</span><span class="p">(</span><span class="s1">&#39;./sample_data/evaluatorObj.dump&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Once the file is created, it can be loaded anytime with
+<a class="reference internal" href="evaltools.html#evaltools.evaluator.load" title="evaltools.evaluator.load"><code class="xref py py-func docutils literal notranslate"><span class="pre">evaluator.load</span></code></a> function.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">obj2</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="s1">&#39;./sample_data/evaluatorObj.dump&#39;</span><span class="p">)</span>
+
+<span class="gp">In [12]: </span><span class="n">obj2</span><span class="o">.</span><span class="n">summary</span><span class="p">()</span>
+<span class="go">Model: ENS</span>
+<span class="go">Species: co</span>
+<span class="go">Time step: 1 hour</span>
+<span class="go">Period: 20170601 - 20170606</span>
+<span class="go">Forecast horizon: 2</span>
+<span class="go">Color: k</span>
+<span class="go">Paths :</span>
+<span class="go">- Sim : ./sample_data/ENSforecast/J{forecastDay}/{year}_co_{station}</span>
+<span class="go">- Obs : ./sample_data/observations/{year}_co_{station}</span>
+
+<span class="go"># objects do not have the same adress, they are considered different</span>
+<span class="gp">In [13]: </span><span class="n">obj</span> <span class="o">==</span> <span class="n">obj2</span>
+<span class="gh">Out[13]: </span><span class="go">False</span>
+
+<span class="go"># but attributes and data have the same values</span>
+<span class="gp">In [14]: </span><span class="n">obj</span><span class="o">.</span><span class="n">stations</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">obj2</span><span class="o">.</span><span class="n">stations</span><span class="p">)</span>
+<span class="gh">Out[14]: </span><span class="go">True</span>
+
+<span class="gp">In [15]: </span><span class="n">obj</span><span class="o">.</span><span class="n">obs_df</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">obj2</span><span class="o">.</span><span class="n">obs_df</span><span class="p">)</span>
+<span class="gh">Out[15]: </span><span class="go">True</span>
+
+<span class="gp">In [16]: </span><span class="n">obj</span><span class="o">.</span><span class="n">sim_df</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">obj2</span><span class="o">.</span><span class="n">sim_df</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="gh">Out[16]: </span><span class="go">True</span>
+
+<span class="gp">In [17]: </span><span class="n">obj</span><span class="o">.</span><span class="n">sim_df</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="o">.</span><span class="n">equals</span><span class="p">(</span><span class="n">obj2</span><span class="o">.</span><span class="n">sim_df</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+<span class="gh">Out[17]: </span><span class="go">True</span>
+</pre></div>
+</div>
+</section>
+<section id="objects-attributes">
+<h2>Objects attributes<a class="headerlink" href="#objects-attributes" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="evaltools.html#evaltools.evaluator.Evaluator" title="evaltools.evaluator.Evaluator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Evaluator</span></code></a> class lies on
+<a class="reference internal" href="evaltools.html#evaltools.evaluator.Observations" title="evaltools.evaluator.Observations"><code class="xref py py-class docutils literal notranslate"><span class="pre">Observations</span></code></a>
+and <a class="reference internal" href="evaltools.html#evaltools.evaluator.Simulations" title="evaltools.evaluator.Simulations"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulations</span></code></a> classes. Both of
+them use <a class="reference internal" href="evaltools.html#evaltools.dataset.Dataset" title="evaltools.dataset.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></a> class, which mostly
+lies on Dataframes. Let us have an overview of the attributes of these classes:</p>
+<p><a class="reference internal" href="evaltools.html#evaltools.evaluator.Observations" title="evaltools.evaluator.Observations"><code class="xref py py-class docutils literal notranslate"><span class="pre">Observations</span></code></a> objects attributes:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [18]: </span><span class="n">obs</span><span class="o">.</span><span class="n">species</span>
+<span class="gh">Out[18]: </span><span class="go">&#39;co&#39;</span>
+
+<span class="gp">In [19]: </span><span class="n">obs</span><span class="o">.</span><span class="n">start_date</span>
+<span class="gh">Out[19]: </span><span class="go">datetime.date(2017, 6, 1)</span>
+
+<span class="gp">In [20]: </span><span class="n">obs</span><span class="o">.</span><span class="n">end_date</span>
+<span class="gh">Out[20]: </span><span class="go">datetime.date(2017, 6, 6)</span>
+
+<span class="gp">In [21]: </span><span class="n">obs</span><span class="o">.</span><span class="n">forecast_horizon</span>
+<span class="gh">Out[21]: </span><span class="go">2</span>
+
+<span class="gp">In [22]: </span><span class="n">obs</span><span class="o">.</span><span class="n">series_type</span>
+<span class="gh">Out[22]: </span><span class="go">&#39;hourly&#39;</span>
+
+<span class="gp">In [23]: </span><span class="n">obs</span><span class="o">.</span><span class="n">stations</span>
+<span class="gh">Out[23]: </span>
+<span class="go">        site area       lat       lon</span>
+<span class="go">code                                 </span>
+<span class="go">AD0942A  bac  urb  42.50969   1.53914</span>
+<span class="go">AT0VOR1  bac  rur  46.67970  12.97190</span>
+<span class="go">AT10001  bac  sub  47.84000  16.52670</span>
+<span class="go">AT31401  bac  sub  48.08610  16.30220</span>
+<span class="go">AT31402  tra  sub  48.12500  16.33170</span>
+<span class="go">CH0002R  bac  rur  46.81310   6.94447</span>
+<span class="go">CH0005A  bac  sub  47.40290   8.61341</span>
+<span class="go">CH0005R  bac  rur  47.06740   8.46334</span>
+<span class="go">CH0010A  bac  urb  47.37760   8.53042</span>
+<span class="go">CZ0ALIB  bac  sub  50.00730  14.44590</span>
+<span class="go">CZ0HHKB  tra  urb  50.19540  15.84640</span>
+<span class="go">CZ0JKOS  bac  rur  49.57340  15.08030</span>
+<span class="go">CZ0PPLA  tra  urb  49.73240  13.40230</span>
+<span class="go">CZ0TOPR  ind  urb  49.85630  18.26970</span>
+
+<span class="gp">In [24]: </span><span class="n">obs</span><span class="o">.</span><span class="n">dataset</span>
+<span class="gh">Out[24]: </span><span class="go">&lt;evaltools.dataset.Dataset at 0x7fc516284a10&gt;</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="evaltools.html#evaltools.evaluator.Simulations" title="evaltools.evaluator.Simulations"><code class="xref py py-class docutils literal notranslate"><span class="pre">Simulations</span></code></a> objects attributes:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [25]: </span><span class="n">sim</span><span class="o">.</span><span class="n">species</span>
+<span class="gh">Out[25]: </span><span class="go">&#39;co&#39;</span>
+
+<span class="gp">In [26]: </span><span class="n">sim</span><span class="o">.</span><span class="n">start_date</span>
+<span class="gh">Out[26]: </span><span class="go">datetime.date(2017, 6, 1)</span>
+
+<span class="gp">In [27]: </span><span class="n">sim</span><span class="o">.</span><span class="n">end_date</span>
+<span class="gh">Out[27]: </span><span class="go">datetime.date(2017, 6, 6)</span>
+
+<span class="gp">In [28]: </span><span class="n">sim</span><span class="o">.</span><span class="n">forecast_horizon</span>
+<span class="gh">Out[28]: </span><span class="go">2</span>
+
+<span class="gp">In [29]: </span><span class="n">sim</span><span class="o">.</span><span class="n">series_type</span>
+<span class="gh">Out[29]: </span><span class="go">&#39;hourly&#39;</span>
+
+<span class="gp">In [30]: </span><span class="n">sim</span><span class="o">.</span><span class="n">stations</span>
+<span class="gh">Out[30]: </span>
+<span class="go">Index([&#39;AD0942A&#39;, &#39;AT0VOR1&#39;, &#39;AT10001&#39;, &#39;AT31401&#39;, &#39;AT31402&#39;, &#39;CH0002R&#39;,</span>
+<span class="go">       &#39;CH0005A&#39;, &#39;CH0005R&#39;, &#39;CH0010A&#39;, &#39;CZ0ALIB&#39;, &#39;CZ0HHKB&#39;, &#39;CZ0JKOS&#39;,</span>
+<span class="go">       &#39;CZ0PPLA&#39;, &#39;CZ0TOPR&#39;],</span>
+<span class="go">      dtype=&#39;object&#39;, name=&#39;code&#39;)</span>
+
+<span class="gp">In [31]: </span><span class="n">sim</span><span class="o">.</span><span class="n">model</span>
+<span class="gh">Out[31]: </span><span class="go">&#39;ENS&#39;</span>
+
+<span class="gp">In [32]: </span><span class="n">sim</span><span class="o">.</span><span class="n">datasets</span>
+<span class="gh">Out[32]: </span>
+<span class="go">[&lt;evaltools.dataset.Dataset at 0x7fc516285460&gt;,</span>
+<span class="go"> &lt;evaltools.dataset.Dataset at 0x7fc516287200&gt;]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">sim.datasets</span></code> is a list of
+<a class="reference internal" href="evaltools.html#evaltools.dataset.Dataset" title="evaltools.dataset.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></a> objects, one for each
+forecast day.</p>
+</div>
+<p><a class="reference internal" href="evaltools.html#evaltools.dataset.Dataset" title="evaltools.dataset.Dataset"><code class="xref py py-class docutils literal notranslate"><span class="pre">Dataset</span></code></a> objects attributes:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [33]: </span><span class="n">dt</span> <span class="o">=</span> <span class="n">obs</span><span class="o">.</span><span class="n">dataset</span>
+
+<span class="gp">In [34]: </span><span class="n">dt</span><span class="o">.</span><span class="n">species</span>
+<span class="gh">Out[34]: </span><span class="go">&#39;co&#39;</span>
+
+<span class="gp">In [35]: </span><span class="n">dt</span><span class="o">.</span><span class="n">start_date</span>
+<span class="gh">Out[35]: </span><span class="go">datetime.date(2017, 6, 1)</span>
+
+<span class="gp">In [36]: </span><span class="n">dt</span><span class="o">.</span><span class="n">end_date</span>
+<span class="gh">Out[36]: </span><span class="go">datetime.date(2017, 6, 7)</span>
+
+<span class="gp">In [37]: </span><span class="n">dt</span><span class="o">.</span><span class="n">nb_days</span>
+<span class="gh">Out[37]: </span><span class="go">7</span>
+
+<span class="gp">In [38]: </span><span class="n">dt</span><span class="o">.</span><span class="n">series_type</span>
+<span class="gh">Out[38]: </span><span class="go">&#39;hourly&#39;</span>
+
+<span class="gp">In [39]: </span><span class="n">dt</span><span class="o">.</span><span class="n">date_format</span>
+<span class="gh">Out[39]: </span><span class="go">&#39;%Y%m%d%H&#39;</span>
+
+<span class="gp">In [40]: </span><span class="nb">type</span><span class="p">(</span><span class="n">dt</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="gh">Out[40]: </span><span class="go">pandas.core.frame.DataFrame</span>
+
+<span class="gp">In [41]: </span><span class="n">dt</span><span class="o">.</span><span class="n">data</span>
+<span class="gh">Out[41]: </span>
+<span class="go">code                 AD0942A  AT0VOR1  AT10001  ...  CZ0JKOS  CZ0PPLA  CZ0TOPR</span>
+<span class="go">2017-06-01 00:00:00      NaN    52.42    51.67  ...    209.0    260.0    150.0</span>
+<span class="go">2017-06-01 01:00:00      NaN    51.94    66.99  ...      NaN      NaN      NaN</span>
+<span class="go">2017-06-01 02:00:00      NaN    52.91    48.73  ...    205.0    225.0    137.0</span>
+<span class="go">2017-06-01 03:00:00      NaN    51.51    33.35  ...    203.0    221.0      NaN</span>
+<span class="go">2017-06-01 04:00:00      NaN    50.15    33.40  ...    200.0    616.0    175.0</span>
+<span class="go">...                      ...      ...      ...  ...      ...      ...      ...</span>
+<span class="go">2017-06-07 19:00:00      NaN    63.87   255.80  ...     47.0    226.0     58.0</span>
+<span class="go">2017-06-07 20:00:00      NaN    64.79   241.32  ...     47.0    247.0      NaN</span>
+<span class="go">2017-06-07 21:00:00      NaN    63.82   229.71  ...    104.0    211.0     58.0</span>
+<span class="go">2017-06-07 22:00:00      NaN    60.28   201.00  ...     97.0    234.0    130.0</span>
+<span class="go">2017-06-07 23:00:00      NaN    61.20   195.26  ...     97.0    210.0    129.0</span>
+
+<span class="go">[168 rows x 14 columns]</span>
+</pre></div>
+</div>
+<p><a class="reference internal" href="evaltools.html#evaltools.evaluator.Evaluator" title="evaltools.evaluator.Evaluator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Evaluator</span></code></a> objects attributes:</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [42]: </span><span class="n">obj</span><span class="o">.</span><span class="n">species</span>
+<span class="gh">Out[42]: </span><span class="go">&#39;co&#39;</span>
+
+<span class="gp">In [43]: </span><span class="n">obj</span><span class="o">.</span><span class="n">start_date</span>
+<span class="gh">Out[43]: </span><span class="go">datetime.date(2017, 6, 1)</span>
+
+<span class="gp">In [44]: </span><span class="n">obj</span><span class="o">.</span><span class="n">end_date</span>
+<span class="gh">Out[44]: </span><span class="go">datetime.date(2017, 6, 6)</span>
+
+<span class="gp">In [45]: </span><span class="n">obj</span><span class="o">.</span><span class="n">forecast_horizon</span>
+<span class="gh">Out[45]: </span><span class="go">2</span>
+
+<span class="gp">In [46]: </span><span class="n">obj</span><span class="o">.</span><span class="n">series_type</span>
+<span class="gh">Out[46]: </span><span class="go">&#39;hourly&#39;</span>
+
+<span class="gp">In [47]: </span><span class="n">obj</span><span class="o">.</span><span class="n">model</span>
+<span class="gh">Out[47]: </span><span class="go">&#39;ENS&#39;</span>
+
+<span class="gp">In [48]: </span><span class="n">obj</span><span class="o">.</span><span class="n">stations</span>
+<span class="gh">Out[48]: </span>
+<span class="go">        site area       lat       lon</span>
+<span class="go">code                                 </span>
+<span class="go">AD0942A  bac  urb  42.50969   1.53914</span>
+<span class="go">AT0VOR1  bac  rur  46.67970  12.97190</span>
+<span class="go">AT10001  bac  sub  47.84000  16.52670</span>
+<span class="go">AT31401  bac  sub  48.08610  16.30220</span>
+<span class="go">AT31402  tra  sub  48.12500  16.33170</span>
+<span class="go">CH0002R  bac  rur  46.81310   6.94447</span>
+<span class="go">CH0005A  bac  sub  47.40290   8.61341</span>
+<span class="go">CH0005R  bac  rur  47.06740   8.46334</span>
+<span class="go">CH0010A  bac  urb  47.37760   8.53042</span>
+<span class="go">CZ0ALIB  bac  sub  50.00730  14.44590</span>
+<span class="go">CZ0HHKB  tra  urb  50.19540  15.84640</span>
+<span class="go">CZ0JKOS  bac  rur  49.57340  15.08030</span>
+<span class="go">CZ0PPLA  tra  urb  49.73240  13.40230</span>
+<span class="go">CZ0TOPR  ind  urb  49.85630  18.26970</span>
+
+<span class="gp">In [49]: </span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">obs_df</span><span class="p">)</span>
+<span class="gh">Out[49]: </span><span class="go">pandas.core.frame.DataFrame</span>
+
+<span class="gp">In [50]: </span><span class="n">obj</span><span class="o">.</span><span class="n">obs_df</span>
+<span class="gh">Out[50]: </span>
+<span class="go">code                 AD0942A  AT0VOR1  AT10001  ...  CZ0JKOS  CZ0PPLA  CZ0TOPR</span>
+<span class="go">2017-06-01 00:00:00      NaN    52.42    51.67  ...    209.0    260.0    150.0</span>
+<span class="go">2017-06-01 01:00:00      NaN    51.94    66.99  ...      NaN      NaN      NaN</span>
+<span class="go">2017-06-01 02:00:00      NaN    52.91    48.73  ...    205.0    225.0    137.0</span>
+<span class="go">2017-06-01 03:00:00      NaN    51.51    33.35  ...    203.0    221.0      NaN</span>
+<span class="go">2017-06-01 04:00:00      NaN    50.15    33.40  ...    200.0    616.0    175.0</span>
+<span class="go">...                      ...      ...      ...  ...      ...      ...      ...</span>
+<span class="go">2017-06-07 19:00:00      NaN    63.87   255.80  ...     47.0    226.0     58.0</span>
+<span class="go">2017-06-07 20:00:00      NaN    64.79   241.32  ...     47.0    247.0      NaN</span>
+<span class="go">2017-06-07 21:00:00      NaN    63.82   229.71  ...    104.0    211.0     58.0</span>
+<span class="go">2017-06-07 22:00:00      NaN    60.28   201.00  ...     97.0    234.0    130.0</span>
+<span class="go">2017-06-07 23:00:00      NaN    61.20   195.26  ...     97.0    210.0    129.0</span>
+
+<span class="go">[168 rows x 14 columns]</span>
+
+<span class="gp">In [51]: </span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">sim_df</span><span class="p">)</span>
+<span class="gh">Out[51]: </span><span class="go">list</span>
+
+<span class="gp">In [52]: </span><span class="nb">type</span><span class="p">(</span><span class="n">obj</span><span class="o">.</span><span class="n">sim_df</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+<span class="gh">Out[52]: </span><span class="go">pandas.core.frame.DataFrame</span>
+
+<span class="gp">In [53]: </span><span class="n">obj</span><span class="o">.</span><span class="n">sim_df</span>
+<span class="gh">Out[53]: </span>
+<span class="go">[                     AD0942A  AT0VOR1  AT10001  ...  CZ0JKOS  CZ0PPLA  CZ0TOPR</span>
+<span class="go"> 2017-06-01 00:00:00      NaN  125.615  195.743  ...  118.072  120.903  200.016</span>
+<span class="go"> 2017-06-01 01:00:00      NaN  124.696  187.501  ...  118.872  121.781  188.149</span>
+<span class="go"> 2017-06-01 02:00:00      NaN  124.414  180.656  ...  120.605  122.917  183.144</span>
+<span class="go"> 2017-06-01 03:00:00      NaN  122.835  178.975  ...  123.277  123.259  187.981</span>
+<span class="go"> 2017-06-01 04:00:00      NaN  122.949  165.245  ...  128.243  125.293  185.981</span>
+<span class="go"> ...                      ...      ...      ...  ...      ...      ...      ...</span>
+<span class="go"> 2017-06-06 19:00:00      NaN  103.669  117.103  ...  122.876  112.820  157.919</span>
+<span class="go"> 2017-06-06 20:00:00      NaN  104.671  122.962  ...  114.701  111.285  161.868</span>
+<span class="go"> 2017-06-06 21:00:00      NaN  106.023  114.108  ...  111.590  111.109  166.062</span>
+<span class="go"> 2017-06-06 22:00:00      NaN  104.786  109.945  ...  109.645  110.133  150.973</span>
+<span class="go"> 2017-06-06 23:00:00      NaN  104.190  111.574  ...  108.634  109.217  143.948</span>
+<span class="go"> </span>
+<span class="go"> [144 rows x 14 columns],</span>
+<span class="go">                      AD0942A  AT0VOR1  AT10001  ...  CZ0JKOS  CZ0PPLA  CZ0TOPR</span>
+<span class="go"> 2017-06-02 00:00:00      NaN  130.632  187.774  ...  115.595  123.772  346.895</span>
+<span class="go"> 2017-06-02 01:00:00      NaN  128.314  191.837  ...  115.705  124.764  307.852</span>
+<span class="go"> 2017-06-02 02:00:00      NaN  128.497  192.607  ...  115.811  124.966  279.956</span>
+<span class="go"> 2017-06-02 03:00:00      NaN  128.094  196.502  ...  114.913  125.033  280.241</span>
+<span class="go"> 2017-06-02 04:00:00      NaN  128.403  191.039  ...  114.898  125.935  303.427</span>
+<span class="go"> ...                      ...      ...      ...  ...      ...      ...      ...</span>
+<span class="go"> 2017-06-07 19:00:00      NaN  100.061  109.947  ...  103.466  105.743  163.747</span>
+<span class="go"> 2017-06-07 20:00:00      NaN   98.077  109.488  ...  103.569  106.134  188.676</span>
+<span class="go"> 2017-06-07 21:00:00      NaN   98.452  110.656  ...  103.568  108.130  165.174</span>
+<span class="go"> 2017-06-07 22:00:00      NaN   97.151  117.971  ...  103.430  109.123  163.276</span>
+<span class="go"> 2017-06-07 23:00:00      NaN   97.184  118.467  ...  103.774  109.683  171.150</span>
+<span class="go"> </span>
+<span class="go"> [144 rows x 14 columns]]</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">obj.obs_df</span></code> is equivalent to <code class="docutils literal notranslate"><span class="pre">obj.observations.dataset.data</span></code>, and <code class="docutils literal notranslate"><span class="pre">obj.sim_df[fd]</span></code>
+is equivalent to <code class="docutils literal notranslate"><span class="pre">obj.simulations.datasets[fd].data</span></code> (where fd is one of the forecast days).</p>
+</div>
+</section>
+<section id="how-to-handle-data-with-a-time-step-different-from-1h">
+<h2>How to handle data with a time step different from 1h<a class="headerlink" href="#how-to-handle-data-with-a-time-step-different-from-1h" title="Link to this heading">#</a></h2>
+<p>Since version 1.0.4, you can work with data at 1h, 2h, 3h, 4h, 6h and 12h time
+step.
+The following methods</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="evaltools.html#evaltools.evaluator.Observations.from_time_series" title="evaltools.evaluator.Observations.from_time_series"><code class="xref py py-func docutils literal notranslate"><span class="pre">Observations.from_time_series</span></code></a></p></li>
+<li><p><a class="reference internal" href="evaltools.html#evaltools.evaluator.Observations.from_dataset" title="evaltools.evaluator.Observations.from_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">Observations.from_dataset</span></code></a></p></li>
+<li><p><a class="reference internal" href="evaltools.html#evaltools.evaluator.Observations.from_nc" title="evaltools.evaluator.Observations.from_nc"><code class="xref py py-func docutils literal notranslate"><span class="pre">Observations.from_nc</span></code></a></p></li>
+<li><p><a class="reference internal" href="evaltools.html#evaltools.evaluator.Simulations.from_time_series" title="evaltools.evaluator.Simulations.from_time_series"><code class="xref py py-func docutils literal notranslate"><span class="pre">Simulations.from_time_series</span></code></a></p></li>
+<li><p><a class="reference internal" href="evaltools.html#evaltools.evaluator.Simulations.from_dataset" title="evaltools.evaluator.Simulations.from_dataset"><code class="xref py py-func docutils literal notranslate"><span class="pre">Simulations.from_dataset</span></code></a></p></li>
+<li><p><a class="reference internal" href="evaltools.html#evaltools.evaluator.Simulations.from_nc" title="evaltools.evaluator.Simulations.from_nc"><code class="xref py py-func docutils literal notranslate"><span class="pre">Simulations.from_nc</span></code></a></p></li>
+</ul>
+<p>have an argument <code class="docutils literal notranslate"><span class="pre">step</span></code> that corresponds to the time step in hours. This
+argument is ignored when argument <em>series_type</em> is ‘daily’.</p>
+</section>
+<section id="plotting-with-translated-annotations">
+<h2>Plotting with translated annotations<a class="headerlink" href="#plotting-with-translated-annotations" title="Link to this heading">#</a></h2>
+<p>If you want the annotations on your charts to be translated into French,
+you can set <code class="docutils literal notranslate"><span class="pre">evaltools.plotting.lang</span> <span class="pre">=</span> <span class="pre">'FR'</span></code> in your script.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="tutorial.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Tutorial</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="catalog.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Chart catalog</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#saving-evaluator-objects">Saving Evaluator objects</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#objects-attributes">Objects attributes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#how-to-handle-data-with-a-time-step-different-from-1h">How to handle data with a time step different from 1h</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#plotting-with-translated-annotations">Plotting with translated annotations</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Météo France (2017-2023).
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
