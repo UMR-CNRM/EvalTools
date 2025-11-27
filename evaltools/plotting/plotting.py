@@ -2885,7 +2885,7 @@ def plot_bar_contingency_table(
 def plot_bar_scores_conc(
         objects, score, conc_range, forecast_day=0, averaging='mean',
         title=None, labels=None, colors=None, xtick_labels=None,
-        min_nb_val=10, based_on='obs', bar_kwargs={},
+        min_nb_val=1, based_on='obs', bar_kwargs={},
         nb_vals=True, output_csv=None, ymin=None, ymax=None,
         fig=None, ax=None):
     """
@@ -2965,7 +2965,9 @@ def plot_bar_scores_conc(
         total = [tot[j][0] for j in range(len(tot))]
         total = np.round(np.true_divide(total, sum(total))*100, decimals=1)
         total = [str(t)+'%' for t in total]
-        tot = str(sum(tot[:][0]))
+        #Fix bug display nbr values display on graph
+        #tot = str(sum(tot[:][0]))
+        tot = str(sum(tot[j][0] for j in range(len(tot))))
 
     if xtick_labels is None:
         xtick_labels = [
