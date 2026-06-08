@@ -930,7 +930,7 @@ def plot_fairmode_forecast_summary(
     # persistence baseline
     # -----------------------------
     if persistence is None:
-        obj_pers = obj.observations.persistenceModel()
+        obj_pers = obj.observations.persistence_model()
     else:
         obj_pers = persistence
 
