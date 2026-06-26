@@ -4033,19 +4033,23 @@ def plot_summary_bar_chart(
     fig = fig or plt.figure(
         figsize=(figsize[0]*len(objects_lol[0])*adapt_size, figsize[1]),
     )
+
     main_ax = ax or fig.add_subplot(1, 1, 1)
     main_ax.clear()
     main_ax.axis('off')
 
-    axs = []
-    n_sub_axes = len(objects_lol)
-    for i in range(n_sub_axes):
-        axs.append(
-            main_ax.inset_axes(
-                [i/n_sub_axes, 0, 1/n_sub_axes, 1]
-            )
-        )
-    for i in range(1, n_sub_axes):
+    # =========================
+    # Bug fix 2026_06_25 : replace inset_axes
+    # =========================
+
+    axs = fig.subplots(1, len(objects_lol))
+
+    if not isinstance(axs, np.ndarray):
+        axs = [axs]
+
+    # IMPORTANT : keep "sharey implicite" behavior if needed
+    # (made properly here)
+    for i in range(1, len(axs)):
         axs[i].sharey(axs[0])
 
     # fig, axs = plt.subplots(
@@ -4056,7 +4060,17 @@ def plot_summary_bar_chart(
     # if not isinstance(axs, np.ndarray):  # when len(objects_lol) == 1
     #     axs = [axs]
 
-    axs2 = [sax.twinx() for sax in axs]  # ax for correlation
+    axs2 = [ax.twinx() for ax in axs]  # ax for correlation
+
+    # RMSE (histogram) in background
+    for ax in axs:
+        ax.set_zorder(2)
+        ax.patch.set_alpha(0)
+
+    # corr (ax2) on foreground
+    for ax2 in axs2:
+        ax2.set_zorder(3)
+        ax2.patch.set_alpha(0)
 
     colors_legend = []
     labels_legend = []
@@ -4237,7 +4251,6 @@ def plot_summary_bar_chart(
 
 plot_bb = plot_summary_bar_chart
 IMPLEMENTED_PLOTS['summary_bar_chart'] = plot_summary_bar_chart
-
 
 def plot_exceedances_scores(
         objects, threshold, score_list=None, forecast_day=0, title="",
