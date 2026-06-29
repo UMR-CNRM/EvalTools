@@ -1412,7 +1412,8 @@ def _target_diagram_multi_models(
     colors = colors or [obj.color for obj in objects]
     labels = labels or [obj.model for obj in objects]
 
-    fig = fig or plt.figure()
+    #fig = fig or plt.figure()
+    fig = fig or plt.figure(constrained_layout=True)
     ax = ax or fig.add_subplot(1, 1, 1)
 
     # axes
@@ -1465,8 +1466,8 @@ def _target_diagram_multi_models(
     ax.add_artist(circle)
 
     # Make place on the side of the figure
-    box = ax.get_position()
-    ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+    #box = ax.get_position()
+    #ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 
     # scatter plot
     mqi_colors = []
@@ -1570,6 +1571,7 @@ def _target_diagram_multi_models(
             )
 
     # legend
+    
     plt.text(
         2.1, 1.6,
         "$\\alpha$ = {}".format(objects[0]._fairmode_params['alpha']),
@@ -1875,7 +1877,8 @@ def _forecast_target_diagram_multi_models(
     if labels is None:
         labels = [obj.model for obj in objects]
 
-    fig = fig or plt.figure()
+    #fig = fig or plt.figure()
+    fig = fig or plt.figure(constrained_layout=True)
     ax = ax or fig.add_subplot(1, 1, 1)
 
     # axes
@@ -1913,8 +1916,8 @@ def _forecast_target_diagram_multi_models(
     ax.add_artist(circle)
 
     # Make place on the side of the figure
-    box = ax.get_position()
-    ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+    #box = ax.get_position()
+    #ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 
     # scatter plot
     mqi_colors = []
@@ -2288,7 +2291,8 @@ def plot_yearly_fairmode_summary(
     n_np = self._fairmode_params['Nnp']
 
     # plotting
-    fig = fig or plt.figure(figsize=(9, 4))
+    #fig = fig or plt.figure(figsize=(9, 4))
+    fig = fig or plt.figure(constrained_layout=True)
     ax = ax or fig.add_subplot(1, 1, 1)
     ax.clear()
     ax.axis('off')
@@ -2432,7 +2436,7 @@ def plot_yearly_fairmode_summary(
         return fig, ax
 
 
-@plt.rc_context({"savefig.bbox": 'tight'})
+@plt.rc_context({"savefig.bbox": 'standard'})
 @plot_func
 def plot_scatter_diagram(
         obj, availability_ratio=.75, forecast_day=0,
