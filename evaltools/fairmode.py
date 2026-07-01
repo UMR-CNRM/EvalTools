@@ -781,6 +781,496 @@ def plot_fairmode_summary(
         return fig, ax
 
 
+@plt.rc_context({'figure.autolayout': False})
+@plot_func
+def plot_fairmode_forecast_summary(
+        self, availability_ratio=.75, forecast_day=0, title=None, label=None,
+        return_mpc=False, persistence=None, write_categories=True, fig=None, ax=None):
+    """
+    FAIRMODE forecast summary statistics diagram.
+
+    Forecast summary diagram as described in FAIRMODE guidance
+    document on modelling quality objectives and benchmarking.
+    
+    - replaces RMSU-based normalization
+    - uses persistence RMSE as forecast baseline
+
+    Parameters
+    ----------
+    self : evaltools.Evaluator object
+        Object used for plotting.
+    availability_ratio : float
+        Minimal rate of data available on the period required per
+        forecast day to compute the scores for each station.
+    forecast_day : int
+        Forecast day used in the diagram.
+    title : str
+        Diagram title.
+    label : str
+        Label for the default title.
+    write_categories : bool
+        If True, write "observations", "time" and "space" on the left of the
+        plot.
+
+    """
+    
+    def common_params(ax, xmin, xmax, points, mqi=None, sym=True):
+        """
+        Draw common features to all subplots.
+
+        Parameters
+        ----------
+        ax : matplotlib axis
+            Current subplot.
+        xmin, xmax : scalar
+            Limit values for the plot
+        points : 1D array-like
+            Values for the scatter-plot.
+        mqi : scalar
+            Modeling quality indicator. If < 1 for 90% of the stations,
+            mqo is fullfilled (green dot, otherwise red).
+        sym : bool
+            Must be set to True if the subplot statistical indicator
+            can be negative.
+
+        """
+        # plot points
+        ax.scatter(points, np.ones(len(points)), zorder=10)
+        ax.set_xlim(xmin, xmax)
+        ax.set_ylim(ymin, ymax)
+        ax.grid(False, which='both')
+
+        # if points live out of limits, plot a point in the dashed area
+        if (points > xmax).any():
+            ax.scatter(
+                [xmax+(xmax-xmin)*0.04], [1],
+                clip_on=False,
+                c=dot_col,
+            )
+        if (points < xmin).any():
+            ax.scatter(
+                [xmin-(xmax-xmin)*0.04], [1],
+                clip_on=False,
+                c=dot_col,
+            )
+
+        # remove y ticks
+        ax.tick_params(axis='y', which='both', left=False)
+        ax.set_yticks([0])
+        ax.set_yticklabels([""])
+
+        # draw a dashed rectangle at the end of the domain
+        if sym is True:
+            ax.spines['left'].set_visible(False)
+            pol = plt.Polygon(
+                xy=[[xmin, 2],
+                    [xmin-(xmax-xmin)*0.08, 2],
+                    [xmin-(xmax-xmin)*0.08, 0],
+                    [xmin, 0]],
+                closed=False, ls='--',
+                clip_on=False,
+                fc='none',
+                edgecolor='k',
+            )
+            ax.add_patch(pol)
+        ax.spines['right'].set_visible(False)
+        pol = plt.Polygon(
+            xy=[[xmax, 2],
+                [xmax+(xmax-xmin)*0.08, 2],
+                [xmax+(xmax-xmin)*0.08, 0],
+                [xmax, 0]],
+            closed=False,
+            ls='--',
+            clip_on=False,
+            fc='none',
+            edgecolor='k',
+        )
+        ax.add_patch(pol)
+
+        # reduce tick size
+        ax.tick_params(axis='x', labelsize='small')
+
+        # # give more space to y label
+        # box = ax.get_position()
+        # ax.set_position(
+        #     [box.x0+box.width*0.15, box.y0, box.width*0.8, box.height*0.4]
+        # )
+
+        # MQI fulfillment (plot a green or red dot)
+        if mqi is not None:
+            mqo = np.sum(mqi < 1)/float(len(mqi)) >= 0.9
+            col = '#4CFF00'*int(mqo) + 'r'*int(~mqo)
+            ax.scatter(
+                [xmax+(xmax-xmin)*0.15], [1],
+                clip_on=False,
+                c=col,
+                s=100,
+            )
+            return mqo
+
+    if not hasattr(self, 'fairmode_params'):
+        self.set_fairmode_params(availability_ratio)
+    
+    if title is None:
+        title = (
+            "{model}\n" +
+            "{spe}\n" +
+            "{start_date} 00UTC to {end_date} 00UTC"
+        ).format(
+            model=label or self.model,
+            spe=self._fairmode_params['species_name'],
+            start_date=self.start_date,
+            end_date=self.end_date,
+        )
+    
+    
+    obj = self._fairmode_params['obj']
+
+    # -----------------------------
+    # persistence baseline
+    # -----------------------------
+    if persistence is None:
+        obj_pers = obj.observations.persistence_model()
+    else:
+        obj_pers = persistence
+
+    
+    obs_pers = obj_pers.get_obs(forecast_day=forecast_day)
+    sim_pers = obj_pers.get_sim(forecast_day=forecast_day)
+    
+    u95r = self._fairmode_params['u95r']
+    alpha = self._fairmode_params['alpha']
+    rv = self._fairmode_params['RV']
+    mu = u95r*np.sqrt((1-alpha**2)*sim_pers**2+(alpha*rv)**2)
+    
+    beta = self._fairmode_params['beta']
+    threshold = self._fairmode_params['threshold']
+    perc = self._fairmode_params['perc']
+    
+    sub_obj = obj.sub_period(obj_pers.start_date, obj_pers.end_date)
+
+    obs = sub_obj.get_obs(forecast_day=forecast_day)
+    sim = sub_obj.get_sim(forecast_day=forecast_day)
+
+    
+    # remove invalid pairs
+    idx_both_nan = np.logical_or(sim_pers.isna(), sim.isna())
+    sim_pers = sim_pers.where(~idx_both_nan)
+    sim = sim.where(~idx_both_nan)
+
+    # -----------------------------
+    # baseline error (RMSE persistence) instead of RMSU
+    # -----------------------------   
+    
+    sc_pers = evt.scores.stats2d(
+            np.maximum(
+                abs(obs_pers + mu - sim_pers),
+                abs(obs_pers - mu - sim_pers),
+            ),
+            pd.DataFrame(0., index=obs_pers.index, columns=obs_pers.columns),
+            score_list=['RMSE'],
+            axis=0,
+            threshold=float(availability_ratio),
+            keep_nan=True,
+    )
+
+    # -----------------------------
+    # forecast scores
+    # -----------------------------        
+    scores = evt.scores.stats2d(
+            obs, sim,
+            score_list=['MeanBias', 'PearsonR', 'obs_std', 'sim_std', 'obs_mean', 'sim_mean'],
+            axis=0,
+            threshold=float(availability_ratio),
+            keep_nan=True,
+    )
+        
+    if scores.isna().all().all():
+        print("No valid stations !!!")
+        if return_mpc:
+            return None, None, None
+        else:
+            return None, None
+
+
+    # -----------------------------
+    # figure
+    # -----------------------------
+    fig = fig or plt.figure(figsize=(9, 6))
+    ax = ax or fig.add_subplot(1, 1, 1)
+    ax.clear()
+    ax.axis('off')
+    
+    # plt.subplots_adjust(left=.25, right=.85)
+
+    plt.title(title)
+    dot_col = "#1F77B4"
+    ymin = 0
+    ymax = 2
+    mpc_dict = {}
+
+    sub_axes = []
+    n_sub_axes = 8
+    lmarg = .18
+    rmarg = .05
+    for i in range(1, n_sub_axes+1):
+        # sub_axes.append(
+        #     ax.inset_axes(
+        #         [0, marg + (i-2*marg*i)/n_sub_axes, 1, .04]
+        #     )
+        # )
+        sub_axes.append(
+            ax.inset_axes(
+                [lmarg, 1 - i/n_sub_axes, 1 - lmarg - rmarg, .04]
+            )
+        )
+        # sub_axes.append(ax.inset_axes([0, 1-i/n_sub_axes, 1, .04]))
+
+
+    # ------- obs mean -------
+    ax1 = sub_axes[0]
+    common_params(
+        ax1, xmin=0, xmax=100, points=scores['obs_mean'], sym=False,
+    )
+    ax1.set_ylabel(
+        "Observed   \nmean ",
+        labelpad=70,
+        rotation='horizontal',
+        verticalalignment='center',
+        size='small',
+    )
+    ax1.text(105, -2, r"$\mu gm^{-3}$")
+
+    # ------- obs exceedences -------
+    ax2 = sub_axes[1]
+    valid_stations = scores.index[~scores[scores.keys()[0]].isna()]
+    
+    #On calcule le nbr d'exceedances basé sur le obs du forecast summary car il a la meme période que la persistance
+    nb_exceedences = (obs[valid_stations] > threshold).sum()
+    
+    common_params(ax2, xmin=0, xmax=100, points=nb_exceedences, sym=False)
+    ax2.set_ylabel(
+        "Observed   \nexceedences \n(> " +
+        str(threshold) + r" $\mu gm^{-3}$)",
+        labelpad=70,
+        rotation='horizontal',
+        verticalalignment='center',
+        size='small')
+    ax2.text(105, -2, "days")
+    
+    
+     # ------- TIME Bias Norm -------
+    ax3 = sub_axes[2]
+    x = scores['MeanBias']/(sc_pers['RMSE'])
+    mpc = common_params(
+        ax3, xmin=-2, xmax=2, points=x, mqi=np.abs(x).dropna(),
+    )
+    mpc_dict['time_bias'] = mpc
+    ax3.set_ylabel(
+        "Bias Norm",
+        size='small',
+        # "$\\frac{Mean\\:bias}{\\beta RMS_U}$",
+        # size='large',
+        labelpad=70,
+        rotation='horizontal',
+        verticalalignment='center')
+    # colored areas
+    rect = plt.Rectangle(
+        xy=(-1., 0.), width=2., height=2.,
+        edgecolor='none', fc='#FFA500',
+    )
+    ax3.add_patch(rect)
+    rect = plt.Rectangle(
+        xy=(-.7, 0.), width=1.4, height=2.,
+        edgecolor='none', fc='#4CFF00',
+    )
+    ax3.add_patch(rect)
+
+
+      # ------- TIME Corr Norm -------
+    ax4 = sub_axes[3]
+    x = (2.*scores['obs_std']*scores['sim_std']*(
+            1. - scores['PearsonR'])) / (sc_pers['RMSE'])**2
+    mpc = common_params(
+        ax4, xmin=0, xmax=2, points=x, mqi=x.dropna(), sym=False,
+    )
+    mpc_dict['time_corr'] = mpc
+    ax4.set_ylabel(
+        "1-R Norm",
+        size='small',
+        # "$\\frac{2\\sigma_O\\sigma_M(1-R)}{\\beta^2 RMS_U^2}$",
+        # size='large',
+        labelpad=70,
+        rotation='horizontal',
+        verticalalignment='center',
+    )
+    # colored areas
+    rect = plt.Rectangle(xy=(0., 0.), width=1., height=2.,
+                         edgecolor='none', fc='#FFA500')
+    ax4.add_patch(rect)
+    rect = plt.Rectangle(xy=(0., 0.), width=.5, height=2.,
+                         edgecolor='none', fc='#4CFF00')
+    ax4.add_patch(rect)
+
+
+    # ------- TIME StdDev Norm -------
+    ax5 = sub_axes[4]
+    x = (scores['sim_std']-scores['obs_std'])/(sc_pers['RMSE'])
+    mpc = common_params(
+        ax5, xmin=-2, xmax=2, points=x, mqi=np.abs(x).dropna(),
+    )
+    mpc_dict['time_std'] = mpc
+    ax5.set_yticks([1.])
+    ax5.set_ylabel(
+        "StDev Norm",
+        size='small',
+        # "$\\frac{\\sigma_M-\\sigma_O}{\\beta RMS_U}$",
+        # size='large',
+        labelpad=70,
+        rotation='horizontal',
+        verticalalignment='center')
+    # colored areas
+    rect = plt.Rectangle(
+        xy=(-1., 0.), width=2., height=2.,
+        edgecolor='none', fc='#FFA500',
+    )
+    ax5.add_patch(rect)
+    rect = plt.Rectangle(
+        xy=(-.7, 0.), width=1.4, height=2.,
+        edgecolor='none', fc='#4CFF00',
+    )
+    ax5.add_patch(rect)
+
+
+    # ------- Hperc -------
+    ax6 = sub_axes[5]
+    obs = self._fairmode_params['obj'].get_obs(forecast_day=forecast_day)
+    sim = self._fairmode_params['obj'].get_sim(forecast_day=forecast_day)
+    perc_values = evt.scores.stats2d(
+        obs, sim,
+        score_list=[
+            'obs_percentile {}'.format(perc),
+            'sim_percentile {}'.format(perc),
+        ],
+        axis=0, threshold=float(availability_ratio),
+        keep_nan=True,
+    )
+
+    h_perc = (
+        (
+            perc_values['sim_percentile {}'.format(perc)] -
+            perc_values['obs_percentile {}'.format(perc)]
+        ) / (sc_pers['RMSE'])
+    )
+    mpc = common_params(
+        ax6, xmin=-2, xmax=2, points=h_perc, mqi=np.abs(h_perc).dropna(),
+    )
+        
+    mpc_dict['time_hperc'] = mpc
+    ax6.set_ylabel(
+        "Hperc Norm",
+        size='small',
+        # "$\\frac{M_{perc}-O_{perc}}{\\beta U_{95}(O_{perc})}$",
+        # size='large',
+        labelpad=70,
+        rotation='horizontal',
+        verticalalignment='center')
+    # colored area
+    rect = plt.Rectangle(xy=(-1., 0.), width=2., height=2.,
+                         edgecolor='none', fc='#4CFF00')
+    ax6.add_patch(rect)
+    
+    
+    # ------- SPACE Corr Norm -------
+    ax7 = sub_axes[6]
+    sim = scores['sim_mean']
+    obs = scores['obs_mean']
+    corr = ((np.nanmean((obs-np.nanmean(obs))*(sim-np.nanmean(sim)))) /
+            (np.nanstd(obs)*np.nanstd(sim)))
+    
+    #Remplacement de rmsu_ par rmse_perc_space --> attention rmse_pers_space contient une racine carrée comme rmsu_ en contient une
+    #rmsu_ = np.sqrt(np.nanmean(u_95**2))
+    rmse_pers_space = np.sqrt(np.nanmean(sc_pers['RMSE']**2))
+    x = ((2.*np.nanstd(obs)*np.nanstd(sim)*(1. - corr)) /
+         (rmse_pers_space)**2)
+    mpc = common_params(
+        ax7, xmin=0, xmax=2, points=np.array([x]), sym=False,
+        mqi=np.array([x]),
+    )
+    mpc_dict['spatial_corr'] = mpc
+    ax7.set_ylabel(
+        "1-R Norm",
+        size='small',
+        # "$\\frac{2\\sigma_\\bar{O}\\sigma_\\bar{M}(1-R)}" +
+        # "{\\beta^2 RMS_\\bar{U}^2}$",
+        # size='large',
+        labelpad=70,
+        rotation='horizontal',
+        verticalalignment='center',
+    )
+    # colored areas
+    rect = plt.Rectangle(
+        xy=(0., 0.), width=1., height=2., edgecolor='none', fc='#FFA500',
+    )
+    ax7.add_patch(rect)
+    rect = plt.Rectangle(
+        xy=(0., 0.), width=.5, height=2., edgecolor='none', fc='#4CFF00',
+    )
+    ax7.add_patch(rect)
+
+
+    # ------- SPACE StDev Norm -------
+    ax8 = sub_axes[7]
+    x = (np.nanstd(sim)-np.nanstd(obs))/(rmse_pers_space)
+    mpc = common_params(
+        ax8, xmin=-2, xmax=2, points=np.array([x]), mqi=np.abs(np.array([x])),
+    )
+    mpc_dict['spatial_std'] = mpc
+    ax8.set_ylabel(
+        "StDev Norm",
+        size='small',
+        # "$\\frac{\\sigma_\\bar{M}-\\sigma_\\bar{O}}" +
+        # "{\\beta RMS_\\bar{U}}$",
+        # size='large',
+        labelpad=70,
+        rotation='horizontal',
+        verticalalignment='center',
+    )
+    ax8.annotate(
+        '{valid}/{all} valid stations'.format(
+            valid=len(valid_stations), all=len(self.stations)),
+        xy=(1, 0), xycoords='axes fraction', fontsize='large',
+        xytext=(40, -20), textcoords='offset points', ha='right',
+        va='top',
+    )
+    # colored areas
+    rect = plt.Rectangle(
+        xy=(-1., 0.), width=2., height=2.,
+        edgecolor='none', fc='#FFA500',
+    )
+    ax8.add_patch(rect)
+    rect = plt.Rectangle(
+        xy=(-.7, 0.), width=1.4, height=2.,
+        edgecolor='none', fc='#4CFF00',
+    )
+    ax8.add_patch(rect)
+    
+    
+    if write_categories:
+        ax1.text(-37, -8, "-- observations --", rotation='vertical')
+        ax4.text(
+            -37/50., -13,
+            "----------------- time -----------------",
+            rotation='vertical',
+        )
+        ax7.text(-37/50., -8, "------ space ------", rotation='vertical')
+
+    if return_mpc:
+        return fig, ax, mpc_dict
+    else:
+        return fig, ax
+
+
 @plot_func
 def plot_target_diagram(
         obj, availability_ratio=.75, forecast_day=0,
@@ -922,7 +1412,8 @@ def _target_diagram_multi_models(
     colors = colors or [obj.color for obj in objects]
     labels = labels or [obj.model for obj in objects]
 
-    fig = fig or plt.figure()
+    #fig = fig or plt.figure()
+    fig = fig or plt.figure(constrained_layout=True)
     ax = ax or fig.add_subplot(1, 1, 1)
 
     # axes
@@ -975,8 +1466,8 @@ def _target_diagram_multi_models(
     ax.add_artist(circle)
 
     # Make place on the side of the figure
-    box = ax.get_position()
-    ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+    #box = ax.get_position()
+    #ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 
     # scatter plot
     mqi_colors = []
@@ -1080,6 +1571,7 @@ def _target_diagram_multi_models(
             )
 
     # legend
+    
     plt.text(
         2.1, 1.6,
         "$\\alpha$ = {}".format(objects[0]._fairmode_params['alpha']),
@@ -1385,7 +1877,8 @@ def _forecast_target_diagram_multi_models(
     if labels is None:
         labels = [obj.model for obj in objects]
 
-    fig = fig or plt.figure()
+    #fig = fig or plt.figure()
+    fig = fig or plt.figure(constrained_layout=True)
     ax = ax or fig.add_subplot(1, 1, 1)
 
     # axes
@@ -1423,8 +1916,8 @@ def _forecast_target_diagram_multi_models(
     ax.add_artist(circle)
 
     # Make place on the side of the figure
-    box = ax.get_position()
-    ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
+    #box = ax.get_position()
+    #ax.set_position([box.x0, box.y0, box.width * 0.8, box.height])
 
     # scatter plot
     mqi_colors = []
@@ -1798,7 +2291,8 @@ def plot_yearly_fairmode_summary(
     n_np = self._fairmode_params['Nnp']
 
     # plotting
-    fig = fig or plt.figure(figsize=(9, 4))
+    #fig = fig or plt.figure(figsize=(9, 4))
+    fig = fig or plt.figure(constrained_layout=True)
     ax = ax or fig.add_subplot(1, 1, 1)
     ax.clear()
     ax.axis('off')
@@ -1942,7 +2436,7 @@ def plot_yearly_fairmode_summary(
         return fig, ax
 
 
-@plt.rc_context({"savefig.bbox": 'tight'})
+@plt.rc_context({"savefig.bbox": 'standard'})
 @plot_func
 def plot_scatter_diagram(
         obj, availability_ratio=.75, forecast_day=0,
