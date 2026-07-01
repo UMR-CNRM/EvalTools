@@ -579,3 +579,12 @@ evt.plotting.plot_dynamic_indicator_day_night(
     obj,
     output_file="../doc/source/charts/dynamic_indicator_day_night",
 )
+
+print("forecast_summary")
+evt.fairmode.plot_fairmode_forecast_summary(
+    objs['ENS'],
+    availability_ratio=0.75,
+    forecast_day=0,
+    output_file="../doc/source/charts/forecast_summary",
+    file_formats=['png'],
+)
