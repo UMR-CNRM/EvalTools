@@ -971,7 +971,7 @@ def plot_fairmode_forecast_summary(
             score_list=['RMSE'],
             axis=0,
             threshold=float(availability_ratio),
-            keep_nan=True,
+            #keep_nan=True,
     )
 
     # -----------------------------
@@ -982,7 +982,7 @@ def plot_fairmode_forecast_summary(
             score_list=['MeanBias', 'PearsonR', 'obs_std', 'sim_std', 'obs_mean', 'sim_mean'],
             axis=0,
             threshold=float(availability_ratio),
-            keep_nan=True,
+            #keep_nan=True,
     )
         
     if scores.isna().all().all():
@@ -1003,7 +1003,9 @@ def plot_fairmode_forecast_summary(
     
     # plt.subplots_adjust(left=.25, right=.85)
 
-    plt.title(title)
+    #plt.title(title)
+    fig.suptitle(title, y=0.98)
+    fig.subplots_adjust(top=0.88)
     dot_col = "#1F77B4"
     ymin = 0
     ymax = 2
@@ -1144,8 +1146,10 @@ def plot_fairmode_forecast_summary(
 
     # ------- Hperc -------
     ax6 = sub_axes[5]
-    obs = self._fairmode_params['obj'].get_obs(forecast_day=forecast_day)
-    sim = self._fairmode_params['obj'].get_sim(forecast_day=forecast_day)
+    #obs = self._fairmode_params['obj'].get_obs(forecast_day=forecast_day)
+    #sim = self._fairmode_params['obj'].get_sim(forecast_day=forecast_day)
+    obs = sub_obj.get_obs(forecast_day=forecast_day)
+    sim = sub_obj.get_sim(forecast_day=forecast_day)
     perc_values = evt.scores.stats2d(
         obs, sim,
         score_list=[
@@ -1153,7 +1157,7 @@ def plot_fairmode_forecast_summary(
             'sim_percentile {}'.format(perc),
         ],
         axis=0, threshold=float(availability_ratio),
-        keep_nan=True,
+        #keep_nan=True,
     )
 
     h_perc = (
