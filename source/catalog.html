@@ -1,0 +1,695 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Chart catalog &#8212; evaltools 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'source/catalog';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Tables module" href="tables.html" />
+    <link rel="prev" title="Tips" href="tips.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="2.0.1" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.svg" class="logo__image only-light" alt="evaltools 2.0.1 documentation - Home"/>
+    <img src="../_static/logo.svg" class="logo__image only-dark pst-js-only" alt="evaltools 2.0.1 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="guide.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="evaltools.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="guide.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="evaltools.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="tips.html"
+                          title="previous chapter">Tips</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="tables.html"
+                          title="next chapter">Tables module</a></p>
+  </div></div>
+        <div class="sidebar-primary-item">
+<div id="searchbox"></div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="guide.html" class="nav-link">User guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Chart catalog</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="chart-catalog">
+<h1>Chart catalog<a class="headerlink" href="#chart-catalog" title="Link to this heading">#</a></h1>
+<section id="time-series">
+<h2>Time series<a class="headerlink" href="#time-series" title="Link to this heading">#</a></h2>
+<p>Observation and simulation time series can be drawn with
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_time_series" title="evaltools.plotting.plotting.plot_time_series"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_time_series</span></code></a>
+function.</p>
+<img alt="../_images/time_series.png" src="../_images/time_series.png" />
+</section>
+<section id="average-of-a-score-as-a-function-of-the-forecast-time">
+<h2>Average of a score as a function of the forecast time<a class="headerlink" href="#average-of-a-score-as-a-function-of-the-forecast-time" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_average_ft_scores" title="evaltools.plotting.plotting.plot_average_ft_scores"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_average_ft_scores</span></code></a></p>
+<p>The score can be computed spatially (for each time) or temporally (for each
+station) and then average (mean or median) to get a value for each forecast
+time.</p>
+<img alt="../_images/average_ft_scores.png" src="../_images/average_ft_scores.png" />
+</section>
+<section id="median-scores-for-each-year-quarter">
+<h2>Median scores for each year quarter<a class="headerlink" href="#median-scores-for-each-year-quarter" title="Link to this heading">#</a></h2>
+<p>Median of scores computed every quarters can be drawn combining
+<a class="reference internal" href="evaltools.html#evaltools.evaluator.Evaluator.quarterly_median_score" title="evaltools.evaluator.Evaluator.quarterly_median_score"><code class="xref py py-func docutils literal notranslate"><span class="pre">quarterlyMedianScore</span></code></a>
+method and
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_quarterly_score" title="evaltools.plotting.plotting.plot_quarterly_score"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_quarterly_score</span></code></a>
+function.</p>
+<img alt="../_images/quarterlyMedianScore.png" src="../_images/quarterlyMedianScore.png" />
+</section>
+<section id="time-scores">
+<h2>Time scores<a class="headerlink" href="#time-scores" title="Link to this heading">#</a></h2>
+<p>Scores at a given term can be drawn with
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_time_scores" title="evaltools.plotting.plotting.plot_time_scores"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_time_scores</span></code></a> function.
+For hourly series, the term is a interger corresponding to a forecast hour,
+whereas for daily series, it corresponds to a forecast day.</p>
+<img alt="../_images/time_scores.png" src="../_images/time_scores.png" />
+</section>
+<section id="station-scores">
+<h2>Station scores<a class="headerlink" href="#station-scores" title="Link to this heading">#</a></h2>
+<p>Scores per station for a choosen forecast day can be displayed on a map with
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_station_scores" title="evaltools.plotting.plotting.plot_station_scores"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_station_scores</span></code></a>
+function.</p>
+<img alt="../_images/station_scores.png" src="../_images/station_scores.png" />
+</section>
+<section id="taylor-diagram">
+<h2>Taylor diagram<a class="headerlink" href="#taylor-diagram" title="Link to this heading">#</a></h2>
+<p>A taylor diagram for the first forecast day can be displayed with
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_taylor_diagram" title="evaltools.plotting.plotting.plot_taylor_diagram"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_taylor_diagram</span></code></a>
+function.</p>
+<img alt="../_images/taylor_diagram.png" src="../_images/taylor_diagram.png" />
+</section>
+<section id="scatter-plot-of-score-quartiles">
+<h2>Scatter plot of score quartiles<a class="headerlink" href="#scatter-plot-of-score-quartiles" title="Link to this heading">#</a></h2>
+<p>The function
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_score_quartiles" title="evaltools.plotting.plotting.plot_score_quartiles"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_score_quartiles</span></code></a>
+draws a scatter plot with axis corresponding to the median of two choosen
+scores. Each point on the scatter plot represents one model and the rectangle
+around the point is drawn from the quartiles of the two scores.</p>
+<img alt="../_images/score_quartiles.png" src="../_images/score_quartiles.png" />
+</section>
+<section id="scatter-plot-of-station-scores-for-two-models">
+<h2>Scatter plot of station scores for two models<a class="headerlink" href="#scatter-plot-of-station-scores-for-two-models" title="Link to this heading">#</a></h2>
+<p>The function
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_comparison_scatter_plot" title="evaltools.plotting.plotting.plot_comparison_scatter_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_comparison_scatter_plot</span></code></a>
+displays the score calculated at every stations for two different Evaluator
+objects.</p>
+<img alt="../_images/comparison_scatter_plot.png" src="../_images/comparison_scatter_plot.png" />
+</section>
+<section id="significant-differences">
+<h2>Significant differences<a class="headerlink" href="#significant-differences" title="Link to this heading">#</a></h2>
+<p>The function
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_significant_differences" title="evaltools.plotting.plotting.plot_significant_differences"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_significant_differences</span></code></a>
+tests the significativity of differences between the distribution of station
+scores of two Evaluator objects. Several scores an several couple of
+Evaluator objects can be tested.</p>
+<img alt="../_images/significant_differences.png" src="../_images/significant_differences.png" />
+</section>
+<section id="diurnal-cycle-per-station">
+<h2>Diurnal cycle per station<a class="headerlink" href="#diurnal-cycle-per-station" title="Link to this heading">#</a></h2>
+<p>The function
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_diurnal_cycle" title="evaltools.plotting.plotting.plot_diurnal_cycle"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_diurnal_cycle</span></code></a>
+displays the median of observed and simulated concentration values
+at each station as a function of the forecast time.</p>
+<img alt="../_images/diurnal_cycle.png" src="../_images/diurnal_cycle.png" />
+</section>
+<section id="probability-density-of-raw-data">
+<h2>Probability density of raw data<a class="headerlink" href="#probability-density-of-raw-data" title="Link to this heading">#</a></h2>
+<p>The function
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_data_density" title="evaltools.plotting.plotting.plot_data_density"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_data_density</span></code></a>
+displays the probability density of observation and simulation values.</p>
+<img alt="../_images/data_density.png" src="../_images/data_density.png" />
+</section>
+<section id="probability-density-of-a-score">
+<h2>Probability density of a score<a class="headerlink" href="#probability-density-of-a-score" title="Link to this heading">#</a></h2>
+<p>The function
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_score_density" title="evaltools.plotting.plotting.plot_score_density"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_score_density</span></code></a>
+displays the probability density of score values.</p>
+<img alt="../_images/score_density.png" src="../_images/score_density.png" />
+</section>
+<section id="boxplot-of-data-values">
+<h2>Boxplot of data values<a class="headerlink" href="#boxplot-of-data-values" title="Link to this heading">#</a></h2>
+<p>The function <a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_data_box" title="evaltools.plotting.plotting.plot_data_box"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_data_box</span></code></a>
+displays the distribution of observation and simulation values.</p>
+<img alt="../_images/data_box.png" src="../_images/data_box.png" />
+</section>
+<section id="boxplot-of-score-values">
+<h2>Boxplot of score values<a class="headerlink" href="#boxplot-of-score-values" title="Link to this heading">#</a></h2>
+<p>The function
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_score_box" title="evaltools.plotting.plotting.plot_score_box"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_score_box</span></code></a>
+displays the distribution of score values.</p>
+<img alt="../_images/score_box.png" src="../_images/score_box.png" />
+</section>
+<section id="fairmode-diagrams">
+<h2>FAIRMODE diagrams<a class="headerlink" href="#fairmode-diagrams" title="Link to this heading">#</a></h2>
+<p>The functions
+<a class="reference internal" href="evaltools.html#evaltools.fairmode.plot_target_diagram" title="evaltools.fairmode.plot_target_diagram"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_target_diagram</span></code></a>,
+<a class="reference internal" href="evaltools.html#evaltools.fairmode.plot_fairmode_summary" title="evaltools.fairmode.plot_fairmode_summary"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_fairmode_summary</span></code></a>
+<a class="reference internal" href="evaltools.html#evaltools.fairmode.plot_forecast_target_diagram" title="evaltools.fairmode.plot_forecast_target_diagram"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_forecast_target_diagram</span></code></a>
+<a class="reference internal" href="evaltools.html#evaltools.fairmode.plot_yearly_fairmode_summary" title="evaltools.fairmode.plot_yearly_fairmode_summary"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_forecast_target_diagram</span></code></a>
+and
+<a class="reference internal" href="evaltools.html#evaltools.fairmode.plot_scatter_diagram" title="evaltools.fairmode.plot_scatter_diagram"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_forecast_target_diagram</span></code></a>
+displays five of the Fairmode diagrams: the assessment target plot,
+the summary report, the forecast target plot, the summary report for
+yearly average data and the scatter diagram for yearly average data.
+A description of these diagrams can be found
+on <a class="reference external" href="https://fairmode.jrc.ec.europa.eu/Guidance/Assessment/">FAIRMODE website</a>.</p>
+<img alt="../_images/target.png" src="../_images/target.png" />
+<img alt="../_images/summary.png" src="../_images/summary.png" />
+<img alt="../_images/forecast_target.png" src="../_images/forecast_target.png" />
+<img alt="../_images/yearly_fairmode_summary.png" src="../_images/yearly_fairmode_summary.png" />
+<img alt="../_images/scatter_diagram.png" src="../_images/scatter_diagram.png" />
+</section>
+<section id="scores-as-a-barplot">
+<h2>Scores as a barplot<a class="headerlink" href="#scores-as-a-barplot" title="Link to this heading">#</a></h2>
+<p>The function
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_bar_scores" title="evaltools.plotting.plotting.plot_bar_scores"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_bar_scores</span></code></a>
+displays the barplots of the average of scores computed per station. It is
+possible to compute different bars for different country sets.</p>
+<img alt="../_images/bar_scores.png" src="../_images/bar_scores.png" />
+</section>
+<section id="threshold-exceedances">
+<h2>Threshold exceedances<a class="headerlink" href="#threshold-exceedances" title="Link to this heading">#</a></h2>
+<p>The function
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_bar_exceedances" title="evaltools.plotting.plotting.plot_bar_exceedances"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_bar_exceedances</span></code></a>
+displays the daily number of exceedances.
+It is possible to select different country sets.</p>
+<img alt="../_images/bar_exceedances.png" src="../_images/bar_exceedances.png" />
+<p>The function
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_bar_contingency_table" title="evaltools.plotting.plotting.plot_bar_contingency_table"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_bar_contingency_table</span></code></a>
+displays, as a barplot, the contingency table regarding the number of
+exceedances of a threshold.</p>
+<img alt="../_images/bar_contingency_table.png" src="../_images/bar_contingency_table.png" />
+<p>The function
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_line_exceedances" title="evaltools.plotting.plotting.plot_line_exceedances"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_line_exceedances</span></code></a>
+displays the daily number of exceedances.</p>
+<img alt="../_images/line_exceedances.png" src="../_images/line_exceedances.png" />
+</section>
+<section id="observations-vs-simulations-scatter-plot">
+<h2>Observations vs simulations scatter plot<a class="headerlink" href="#observations-vs-simulations-scatter-plot" title="Link to this heading">#</a></h2>
+<p>Observation and simulation values can be compared with
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_values_scatter_plot" title="evaltools.plotting.plotting.plot_values_scatter_plot"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_values_scatter_plot</span></code></a>
+function.</p>
+<img alt="../_images/values_scatter_plot.png" src="../_images/values_scatter_plot.png" />
+</section>
+<section id="performance-diagram">
+<h2>Performance diagram<a class="headerlink" href="#performance-diagram" title="Link to this heading">#</a></h2>
+<p>This function
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_performance_diagram" title="evaltools.plotting.plotting.plot_performance_diagram"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_performance_diagram</span></code></a>
+draws the performance diagram by P.J. Roebber (“Visualizing multiple measures
+of forecast quality”, 2009).</p>
+<img alt="../_images/performance_diagram.png" src="../_images/performance_diagram.png" />
+</section>
+<section id="roc-curves">
+<h2>ROC curves<a class="headerlink" href="#roc-curves" title="Link to this heading">#</a></h2>
+<p>This function
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_roc_curve" title="evaltools.plotting.plotting.plot_roc_curve"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_roc_curve</span></code></a>
+draws the ROC curve relative to the choosen thresholds for each object.</p>
+<img alt="../_images/roc_curve.png" src="../_images/roc_curve.png" />
+</section>
+<section id="scores-computed-from-a-concentration-limit-value">
+<h2>Scores computed from a concentration limit value<a class="headerlink" href="#scores-computed-from-a-concentration-limit-value" title="Link to this heading">#</a></h2>
+<p>The function
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_exceedances_scores" title="evaltools.plotting.plotting.plot_exceedances_scores"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_exceedances_scores</span></code></a>
+draws a barplot displaying:</p>
+<ul class="simple">
+<li><p>Accuracy</p></li>
+<li><p>Bias score</p></li>
+<li><p>Success ratio</p></li>
+<li><p>probability of detection (Hit rate)</p></li>
+<li><p>false alarm ratio</p></li>
+<li><p>probability of false detection = false alarm rate</p></li>
+<li><p>Threat Score</p></li>
+<li><p>Equitable Threat Score</p></li>
+<li><p>Peirce Skill Score (Hanssen and Kuipers discriminant)</p></li>
+<li><p>Heidke Skill Score</p></li>
+<li><p>Rousseau Skill Score</p></li>
+<li><p>Odds Ratio</p></li>
+<li><p>Odds Ratio Skill Score</p></li>
+</ul>
+<p>More information on these scores can be found here
+<a class="reference external" href="https://www.cawcr.gov.au/projects/verification/">https://www.cawcr.gov.au/projects/verification/</a>.</p>
+<img alt="../_images/exceedances_scores.png" src="../_images/exceedances_scores.png" />
+</section>
+<section id="summary-bar-chart">
+<h2>Summary bar chart<a class="headerlink" href="#summary-bar-chart" title="Link to this heading">#</a></h2>
+<p>The function
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_summary_bar_chart" title="evaltools.plotting.plotting.plot_summary_bar_chart"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_summary_bar_chart</span></code></a>
+plots a bar for RMSE and lollipops for bias and correlation.</p>
+<img alt="../_images/summary_bar_chart.png" src="../_images/summary_bar_chart.png" />
+</section>
+<section id="bar-chart-of-scores-computed-for-different-concentration-classes">
+<h2>Bar chart of scores computed for different concentration classes<a class="headerlink" href="#bar-chart-of-scores-computed-for-different-concentration-classes" title="Link to this heading">#</a></h2>
+<p>The function
+<a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_bar_scores_conc" title="evaltools.plotting.plotting.plot_bar_scores_conc"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_bar_scores_conc</span></code></a>
+plots scores computed for each required concentration range (scores are
+computed for each site and averaged).</p>
+<img alt="../_images/bar_scores_conc.png" src="../_images/bar_scores_conc.png" />
+</section>
+<section id="dynamic-indicators">
+<h2>Dynamic indicators<a class="headerlink" href="#dynamic-indicators" title="Link to this heading">#</a></h2>
+<p><a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_dynamic_indicator_day_night" title="evaltools.plotting.plotting.plot_dynamic_indicator_day_night"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_dynamic_indicator_day_night</span></code></a></p>
+<p><a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_dynamic_indicator_day_week" title="evaltools.plotting.plotting.plot_dynamic_indicator_day_week"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_dynamic_indicator_day_week</span></code></a></p>
+<p><a class="reference internal" href="evaltools.html#evaltools.plotting.plotting.plot_dynamic_indicator_summer_winter" title="evaltools.plotting.plotting.plot_dynamic_indicator_summer_winter"><code class="xref py py-func docutils literal notranslate"><span class="pre">plot_dynamic_indicator_summer_winter</span></code></a></p>
+<img alt="../_images/dynamic_indicator_day_night.png" src="../_images/dynamic_indicator_day_night.png" />
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="tips.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Tips</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="tables.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Tables module</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#time-series">Time series</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#average-of-a-score-as-a-function-of-the-forecast-time">Average of a score as a function of the forecast time</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#median-scores-for-each-year-quarter">Median scores for each year quarter</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#time-scores">Time scores</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#station-scores">Station scores</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#taylor-diagram">Taylor diagram</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scatter-plot-of-score-quartiles">Scatter plot of score quartiles</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scatter-plot-of-station-scores-for-two-models">Scatter plot of station scores for two models</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#significant-differences">Significant differences</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#diurnal-cycle-per-station">Diurnal cycle per station</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-density-of-raw-data">Probability density of raw data</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#probability-density-of-a-score">Probability density of a score</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#boxplot-of-data-values">Boxplot of data values</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#boxplot-of-score-values">Boxplot of score values</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#fairmode-diagrams">FAIRMODE diagrams</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scores-as-a-barplot">Scores as a barplot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#threshold-exceedances">Threshold exceedances</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#observations-vs-simulations-scatter-plot">Observations vs simulations scatter plot</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#performance-diagram">Performance diagram</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#roc-curves">ROC curves</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scores-computed-from-a-concentration-limit-value">Scores computed from a concentration limit value</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#summary-bar-chart">Summary bar chart</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#bar-chart-of-scores-computed-for-different-concentration-classes">Bar chart of scores computed for different concentration classes</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#dynamic-indicators">Dynamic indicators</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Météo France (2017-2023).
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>

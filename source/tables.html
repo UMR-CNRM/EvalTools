@@ -1,0 +1,576 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Tables module &#8212; evaltools 2.0.1 documentation</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=8878045cc6db502f8baf" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+  
+  <!-- So that users can add custom icons -->
+  <script src="../_static/scripts/fontawesome.js?digest=8878045cc6db502f8baf"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf" />
+
+    <script src="../_static/documentation_options.js?v=f5cff4aa"></script>
+    <script src="../_static/doctools.js?v=9bcbadda"></script>
+    <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'source/tables';</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Persistence for model assessment" href="persistence.html" />
+    <link rel="prev" title="Chart catalog" href="catalog.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="2.0.1" />
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the docs ..."
+         aria-label="Search the docs ..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class="col-lg-3 navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.svg" class="logo__image only-light" alt="evaltools 2.0.1 documentation - Home"/>
+    <img src="../_static/logo.svg" class="logo__image only-dark pst-js-only" alt="evaltools 2.0.1 documentation - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class="col-lg-9 navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="guide.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="evaltools.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+        <div class="navbar-item navbar-persistent--container">
+          
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+        </div>
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+    </div>
+    
+  </div>
+  
+  
+    <div class="navbar-persistent--mobile">
+
+<button class="btn search-button-field search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+ <i class="fa-solid fa-magnifying-glass"></i>
+ <span class="search-button__default-text">Search</span>
+ <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+</button>
+    </div>
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="installation.html">
+    Installation
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="guide.html">
+    User guide
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="evaltools.html">
+    API reference
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+  <div>
+    <h4>Previous topic</h4>
+    <p class="topless"><a href="catalog.html"
+                          title="previous chapter">Chart catalog</a></p>
+  </div>
+  <div>
+    <h4>Next topic</h4>
+    <p class="topless"><a href="persistence.html"
+                          title="next chapter">Persistence for model assessment</a></p>
+  </div></div>
+        <div class="sidebar-primary-item">
+<div id="searchbox"></div></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+      <div class="sidebar-primary-item">
+<div id="ethical-ad-placement"
+      class="flat"
+      data-ea-publisher="readthedocs"
+      data-ea-type="readthedocs-sidebar"
+      data-ea-manual="true">
+</div></div>
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="guide.html" class="nav-link">User guide</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Tables module</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="tables-module">
+<h1>Tables module<a class="headerlink" href="#tables-module" title="Link to this heading">#</a></h1>
+<p>The <a class="reference internal" href="evaltools.html#module-evaltools.tables" title="evaltools.tables"><code class="xref py py-mod docutils literal notranslate"><span class="pre">tables</span></code></a> module gathers functions designed to show
+scores computed from <a class="reference internal" href="evaltools.html#evaltools.evaluator.Evaluator" title="evaltools.evaluator.Evaluator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Evaluator</span></code></a> objects
+in a tabular layout or store them in text files.</p>
+<section id="median-of-station-scores">
+<h2>Median of station scores<a class="headerlink" href="#median-of-station-scores" title="Link to this heading">#</a></h2>
+<p>The function <a class="reference internal" href="evaltools.html#evaltools.tables.median_station_scores" title="evaltools.tables.median_station_scores"><code class="xref py py-func docutils literal notranslate"><span class="pre">median_station_scores</span></code></a>
+displays a given list of scores for a given list of
+<a class="reference internal" href="evaltools.html#evaltools.evaluator.Evaluator" title="evaltools.evaluator.Evaluator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Evaluator</span></code></a> objects.</p>
+</section>
+<section id="scores-from-exceedances-contingency-tables">
+<h2>Scores from exceedances contingency tables<a class="headerlink" href="#scores-from-exceedances-contingency-tables" title="Link to this heading">#</a></h2>
+<p>The function <a class="reference internal" href="evaltools.html#evaltools.tables.exceedances_scores" title="evaltools.tables.exceedances_scores"><code class="xref py py-func docutils literal notranslate"><span class="pre">exceedances_scores</span></code></a>
+displays scores from the contingency table of a given list of
+<a class="reference internal" href="evaltools.html#evaltools.evaluator.Evaluator" title="evaltools.evaluator.Evaluator"><code class="xref py py-class docutils literal notranslate"><span class="pre">Evaluator</span></code></a> objects.</p>
+</section>
+<section id="example">
+<h2>Example<a class="headerlink" href="#example" title="Link to this heading">#</a></h2>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [1]: </span><span class="kn">import</span> <span class="nn">evaltools</span> <span class="k">as</span> <span class="nn">evt</span>
+
+<span class="gp">In [2]: </span><span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">date</span><span class="p">,</span> <span class="n">timedelta</span>
+
+<span class="gp">In [3]: </span><span class="n">stations</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">utils</span><span class="o">.</span><span class="n">read_listing</span><span class="p">(</span><span class="s2">&quot;./sample_data/listing&quot;</span><span class="p">)</span>
+
+<span class="gp">In [4]: </span><span class="n">start_date</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="gp">In [5]: </span><span class="n">end_date</span> <span class="o">=</span> <span class="n">date</span><span class="p">(</span><span class="mi">2017</span><span class="p">,</span> <span class="mi">6</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="gp">In [6]: </span><span class="n">observations</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">Observations</span><span class="o">.</span><span class="n">from_time_series</span><span class="p">(</span>
+<span class="gp">   ...: </span>    <span class="n">generic_file_path</span><span class="o">=</span><span class="s2">&quot;./sample_data/observations/</span><span class="si">{year}</span><span class="s2">_no2_</span><span class="si">{station}</span><span class="s2">&quot;</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">correc_unit</span><span class="o">=</span><span class="mf">1e9</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">species</span><span class="o">=</span><span class="s1">&#39;no2&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">start</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">end</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">stations</span> <span class="o">=</span> <span class="n">stations</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="n">forecast_horizon</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="gp">   ...: </span>
+
+<span class="gp">In [7]: </span><span class="n">objs</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="gp">In [8]: </span><span class="n">daily_objs</span> <span class="o">=</span> <span class="p">{}</span>
+
+<span class="gp">In [9]: </span><span class="k">for</span> <span class="n">model</span> <span class="ow">in</span> <span class="p">[</span><span class="s1">&#39;ENS&#39;</span><span class="p">,</span> <span class="s1">&#39;MFM&#39;</span><span class="p">]:</span>
+<span class="gp">   ...: </span>    <span class="n">generic_file_path</span> <span class="o">=</span> <span class="p">(</span>
+<span class="gp">   ...: </span>        <span class="sa">f</span><span class="s2">&quot;../doc/sample_data/</span><span class="si">{</span><span class="n">model</span><span class="si">}</span><span class="s2">forecast/&quot;</span>
+<span class="gp">   ...: </span>        <span class="s2">&quot;J</span><span class="si">{forecast_day}</span><span class="s2">/</span><span class="si">{year}</span><span class="s2">_no2_</span><span class="si">{station}</span><span class="s2">&quot;</span>
+<span class="gp">   ...: </span>    <span class="p">)</span>
+<span class="gp">   ...: </span>    <span class="n">stations_idx</span> <span class="o">=</span> <span class="n">observations</span><span class="o">.</span><span class="n">stations</span><span class="o">.</span><span class="n">index</span>
+<span class="gp">   ...: </span>    <span class="n">simulations</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">Simulations</span><span class="o">.</span><span class="n">from_time_series</span><span class="p">(</span>
+<span class="gp">   ...: </span>        <span class="n">generic_file_path</span><span class="o">=</span><span class="n">generic_file_path</span><span class="p">,</span>
+<span class="gp">   ...: </span>        <span class="n">stations_idx</span><span class="o">=</span><span class="n">stations_idx</span><span class="p">,</span>
+<span class="gp">   ...: </span>        <span class="n">correc_unit</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+<span class="gp">   ...: </span>        <span class="n">species</span><span class="o">=</span><span class="s1">&#39;no2&#39;</span><span class="p">,</span>
+<span class="gp">   ...: </span>        <span class="n">model</span><span class="o">=</span><span class="n">model</span><span class="p">,</span>
+<span class="gp">   ...: </span>        <span class="n">start</span><span class="o">=</span><span class="n">start_date</span><span class="p">,</span>
+<span class="gp">   ...: </span>        <span class="n">end</span><span class="o">=</span><span class="n">end_date</span><span class="p">,</span>
+<span class="gp">   ...: </span>        <span class="n">forecast_horizon</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+<span class="gp">   ...: </span>    <span class="p">)</span>
+<span class="gp">   ...: </span>    <span class="n">objs</span><span class="p">[</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">evt</span><span class="o">.</span><span class="n">Evaluator</span><span class="p">(</span><span class="n">observations</span><span class="p">,</span> <span class="n">simulations</span><span class="p">)</span>
+<span class="gp">   ...: </span>    <span class="n">daily_objs</span><span class="p">[</span><span class="n">model</span><span class="p">]</span> <span class="o">=</span> <span class="n">objs</span><span class="p">[</span><span class="n">model</span><span class="p">]</span><span class="o">.</span><span class="n">daily_max</span><span class="p">()</span>
+<span class="gp">   ...: </span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><a class="reference internal" href="evaltools.html#evaltools.tables.median_station_scores" title="evaltools.tables.median_station_scores"><code class="xref py py-func docutils literal notranslate"><span class="pre">median_station_scores</span></code></a></p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [10]: </span><span class="n">evt</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">median_station_scores</span><span class="p">(</span>
+<span class="gp">   ....: </span>    <span class="n">objs</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span>
+<span class="gp">   ....: </span>    <span class="n">forecast_day</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">   ....: </span>    <span class="n">score_list</span><span class="o">=</span><span class="p">[</span><span class="s1">&#39;RMSE&#39;</span><span class="p">,</span> <span class="s1">&#39;MeanBias&#39;</span><span class="p">,</span> <span class="s1">&#39;PearsonR&#39;</span><span class="p">],</span>
+<span class="gp">   ....: </span><span class="p">)</span>
+<span class="gp">   ....: </span>
+<span class="go">         RMSE  MeanBias  PearsonR</span>
+<span class="go">ENS  9.148952 -3.291864  0.506106</span>
+<span class="go">MFM  9.871666 -3.013708  0.336417</span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><a class="reference internal" href="evaltools.html#evaltools.tables.exceedances_scores" title="evaltools.tables.exceedances_scores"><code class="xref py py-func docutils literal notranslate"><span class="pre">exceedances_scores</span></code></a></p></li>
+</ul>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [11]: </span><span class="n">evt</span><span class="o">.</span><span class="n">tables</span><span class="o">.</span><span class="n">exceedances_scores</span><span class="p">(</span>
+<span class="gp">   ....: </span>    <span class="n">daily_objs</span><span class="o">.</span><span class="n">values</span><span class="p">(),</span>
+<span class="gp">   ....: </span>    <span class="n">forecast_day</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+<span class="gp">   ....: </span>    <span class="n">thresholds</span><span class="o">=</span><span class="p">[</span><span class="mi">20</span><span class="p">,</span> <span class="mi">30</span><span class="p">,</span> <span class="mi">40</span><span class="p">],</span>
+<span class="gp">   ....: </span><span class="p">)</span>
+<span class="gp">   ....: </span>
+<span class="go">threshold = 20</span>
+<span class="go">     accuracy  bias_score  success_ratio  hit_rate  false_alarm_ratio  prob_false_detect  threat_score  equitable_ts  peirce_ss  heidke_ss  rousseau_ss  odds_ratio  odds_ratio_ss</span>
+<span class="go">ENS  0.596154    0.482759       0.785714  0.379310           0.214286           0.130435      0.343750      0.131955   0.248876   0.233146     0.167366    4.074074       0.605839</span>
+<span class="go">MFM  0.653846    0.655172       0.789474  0.517241           0.210526           0.173913      0.454545      0.196567   0.343328   0.328551     0.303571    5.089286       0.671554</span>
+
+
+<span class="go">threshold = 30</span>
+<span class="go">     accuracy  bias_score  success_ratio  hit_rate  false_alarm_ratio  prob_false_detect  threat_score  equitable_ts  peirce_ss  heidke_ss  rousseau_ss  odds_ratio  odds_ratio_ss</span>
+<span class="go">ENS  0.653846    0.181818          1.000  0.181818                NaN                NaN      0.181818      0.113636   0.181818   0.204082     0.076923         NaN            NaN</span>
+<span class="go">MFM  0.692308    0.363636          0.875  0.318182              0.125           0.033333      0.304348      0.184314   0.284848   0.311258     0.250450   13.533333       0.862385</span>
+
+
+<span class="go">threshold = 40</span>
+<span class="go">     accuracy  bias_score  success_ratio  hit_rate  false_alarm_ratio  prob_false_detect  threat_score  equitable_ts  peirce_ss  heidke_ss  rousseau_ss  odds_ratio  odds_ratio_ss</span>
+<span class="go">ENS  0.692308         NaN            NaN       NaN                NaN                NaN           NaN      0.000000   0.000000   0.000000    -0.181818         NaN            NaN</span>
+<span class="go">MFM  0.750000      0.3125            0.8      0.25                0.2           0.027778      0.235294      0.159204   0.222222   0.274678     0.224326   11.666667       0.842105</span>
+
+
+<span class="gh">Out[11]: </span>
+<span class="go">[     accuracy  bias_score  ...  odds_ratio  odds_ratio_ss</span>
+<span class="go"> ENS  0.596154    0.482759  ...    4.074074       0.605839</span>
+<span class="go"> MFM  0.653846    0.655172  ...    5.089286       0.671554</span>
+<span class="go"> </span>
+<span class="go"> [2 rows x 13 columns],</span>
+<span class="go">      accuracy  bias_score  ...  odds_ratio  odds_ratio_ss</span>
+<span class="go"> ENS  0.653846    0.181818  ...         NaN            NaN</span>
+<span class="go"> MFM  0.692308    0.363636  ...   13.533333       0.862385</span>
+<span class="go"> </span>
+<span class="go"> [2 rows x 13 columns],</span>
+<span class="go">      accuracy  bias_score  ...  odds_ratio  odds_ratio_ss</span>
+<span class="go"> ENS  0.692308         NaN  ...         NaN            NaN</span>
+<span class="go"> MFM  0.750000      0.3125  ...   11.666667       0.842105</span>
+<span class="go"> </span>
+<span class="go"> [2 rows x 13 columns]]</span>
+</pre></div>
+</div>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="catalog.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Chart catalog</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="persistence.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Persistence for model assessment</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav class="bd-toc-nav page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#median-of-station-scores">Median of station scores</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#scores-from-exceedances-contingency-tables">Scores from exceedances contingency tables</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#example">Example</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=8878045cc6db502f8baf"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=8878045cc6db502f8baf"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright Météo France (2017-2023).
+      <br/>
+    
+  </p>
+</div>
+      
+        <div class="footer-item">
+
+  <p class="sphinx-version">
+    Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 8.2.3.
+    <br/>
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+    <div class="footer-items__end">
+      
+        <div class="footer-item">
+<p class="theme-version">
+  <!-- # L10n: Setting the PST URL as an argument as this does not need to be localized -->
+  Built with the <a href="https://pydata-sphinx-theme.readthedocs.io/en/stable/index.html">PyData Sphinx Theme</a> 0.16.1.
+</p></div>
+      
+    </div>
+  
+</div>
+
+  </footer>
+  </body>
+</html>
